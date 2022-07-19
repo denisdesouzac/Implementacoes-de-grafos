@@ -82,7 +82,7 @@ class UFDS
       */
       friend ostream &operator<<(ostream& saida, const UFDS& conjunto)
       {
-          for(int i = 0; i < conjunto.p.size(); i++)
+          for(unsigned i = 0; i < conjunto.p.size(); i++)
             saida << i << ": p(" << conjunto.p[i] << "), rank(" << conjunto.rank[i] << ")";
           return saida;
       }

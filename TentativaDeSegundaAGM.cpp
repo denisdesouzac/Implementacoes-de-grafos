@@ -43,7 +43,7 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraA
     }
 
     cout << "Primeira agm: " << endl;
-    for(int i=0; i<primeiraAgm.size();i++){
+    for(unsigned i=0; i<primeiraAgm.size();i++){
         cout << arestas[primeiraAgm[i]].second.first << "-" << arestas[primeiraAgm[i]].second.second << "->" << primeiraAgm[i] << " ";
     }
     cout << endl;
@@ -103,7 +103,7 @@ int segundaMenorAgm(vector<pair<int, ii>> arestas2, int n, int m, vector<int> pr
     sort(arestas2.begin(), arestas2.end());
 
     cout << "Ignorando arestas: ";
-    for(int i=0; i<primeiraAgm.size(); i++){
+    for(unsigned i=0; i<primeiraAgm.size(); i++){
         cout << arestas2[primeiraAgm[i]].second.first << "-" << arestas2[primeiraAgm[i]].second.second << "->" << primeiraAgm[i] << " ";
         segundaOpcoes[i] = kruskall(arestas2, n, m-1, primeiraAgm[i]);
     }
@@ -126,7 +126,7 @@ int main()
     //lista para guardar o index das arestas da primeira AGM formada
     vector<int> primeiraAgm;   // Tem APENAS as que formar a AGM
     //Uma variável que indica o index da aresta que será ignorada
-    int ignorar = -1;
+    //int ignorar = -1;
  
     int n, m; // numero de vertices e numero de arestas
     cin >> n >> m;

@@ -103,7 +103,7 @@ int segundaMenorAgm(vector<pair<int, ii>> arestas2, int n, int m, vector<int> pr
     sort(arestas2.begin(), arestas2.end());
 
     cout << "Ignorando arestas: ";
-    for(unsigned i=0; i<primeiraAgm.size(); i++){
+    for(unsigned i=0; i<primeiraAgm.size()+1; i++){
         cout << arestas2[primeiraAgm[i]].second.first << "-" << arestas2[primeiraAgm[i]].second.second << "->" << primeiraAgm[i] << " ";
         segundaOpcoes[i] = kruskall(arestas2, n, m-1, primeiraAgm[i]);
     }

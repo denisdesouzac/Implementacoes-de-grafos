@@ -1,28 +1,29 @@
 #include "definicoes.h"
 #include "ufds.h"
+
 #include<iostream>
 #include<algorithm>
 using namespace std;
 
 /* retorna o custo da AGM
-* Parametros:
-*  arestas: lista da arestas
-*  n: quantidade de vertices
-*  m: quantidade de arestas
-*/
+ * Parametros:
+ *  arestas: lista da arestas
+ *  n: quantidade de vertices
+ *  m: quantidade de arestas
+ */
 int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraAgm)
 {
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
     sort(arestas.begin(), arestas.end());
-
+ 
     // custo da AGM
     int resultado = 0;
-
+ 
     UFDS ufds(n); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
-
+ 
     int u, v;
     pair<int, ii> e;
-
+ 
     int numero_arestas = 0;
     for(int i = 0; i < m; i++)
     {
@@ -35,11 +36,17 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraA
             resultado += e.first;
             numero_arestas++;
             if(numero_arestas == n-1)
-            break;
-        
+              break;
+         
             ufds.uniao(u, v);
         }
     }
+
+    cout << "Primeira agm: " << endl;
+    for(unsigned i=0; i<primeiraAgm.size();i++){
+        cout << arestas[primeiraAgm[i]].second.first << "-" << arestas[primeiraAgm[i]].second.second << "->" << primeiraAgm[i] << " ";
+    }
+    cout << endl;
 
     return resultado;
 }
@@ -49,16 +56,17 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
 {
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
     sort(arestas.begin(), arestas.end());
-
+ 
     // custo da AGM
     int resultado = 0;
-
+ 
     UFDS ufds(n); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
-
+ 
     int u, v;
     pair<int, ii> e;
-
+ 
     int numero_arestas = 0;
+    cout <<" ( ";
     for(int i = 0; i < m; i++)
     {
         e = arestas[i];
@@ -66,14 +74,16 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
         v = e.second.second;
         if(!ufds.mesmoConjunto(u, v) and i != ignorar)
         {
+            cout << arestas[i].first << " + ";
             resultado += e.first;
             numero_arestas++;
             if(numero_arestas == n-1)
-            break;
-        
+              break;
+         
             ufds.uniao(u, v);
         }
     }
+    cout << " ) ";
 
     return resultado;
 }
@@ -92,9 +102,19 @@ int segundaMenorAgm(vector<pair<int, ii>> arestas2, int n, int m, vector<int> pr
     int segundaOpcoes[n-1];
     sort(arestas2.begin(), arestas2.end());
 
+    cout << "Ignorando arestas: ";
     for(unsigned i=0; i<primeiraAgm.size(); i++){
+        cout << arestas2[primeiraAgm[i]].second.first << "-" << arestas2[primeiraAgm[i]].second.second << "->" << primeiraAgm[i] << " ";
         segundaOpcoes[i] = kruskall(arestas2, n, m-1, primeiraAgm[i]);
     }
+
+    cout << endl;
+
+    cout << "Segundas opcoes: " << endl;
+    for(int i=0; i<n-1;i++){
+        cout << segundaOpcoes[i] << " ";
+    }
+    cout << endl;
 
     return getMenor(segundaOpcoes, n-1);
 }
@@ -107,10 +127,10 @@ int main()
     vector<int> primeiraAgm;   // Tem APENAS as que formar a AGM
     //Uma variável que indica o index da aresta que será ignorada
     //int ignorar = -1;
-
+ 
     int n, m; // numero de vertices e numero de arestas
     cin >> n >> m;
-
+ 
     int u, v, w; // extremos das arestas, e peso de cada aresta
     for(int i = 0; i < m; i++)
     {
@@ -119,7 +139,8 @@ int main()
     }
 
     // vector<pair<int, ii>> arestas2 = arestas;
-
-    cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
+ 
+    cout << "Custo da primeira AGM: " << kruskall(arestas, n, m, primeiraAgm) << endl;
+    cout << "Custo da segunda AGM: " << segundaMenorAgm(arestas, n, m, primeiraAgm) << endl;
     return 0;
 }

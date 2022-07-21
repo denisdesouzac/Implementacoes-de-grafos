@@ -10,8 +10,9 @@ using namespace std;
  *  n: quantidade de vertices
  *  m: quantidade de arestas
  */
-int kruskall(vector<pair<int, ii>>& arestas, int n, int m, vector<int>& primeiraAgm)
+int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraAgm)
 {
+    primeiraAgm.clear();
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
     sort(arestas.begin(), arestas.end());
  

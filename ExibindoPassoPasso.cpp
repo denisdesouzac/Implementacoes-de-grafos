@@ -13,6 +13,7 @@ using namespace std;
  */
 int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraAgm)
 {
+    primeiraAgm.clear();  // Tava esquecendo de começar de novo
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
     sort(arestas.begin(), arestas.end());
  

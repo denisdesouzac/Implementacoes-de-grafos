@@ -127,11 +127,19 @@ int main()
     vector<int> primeiraAgm;   // Tem APENAS as que formar a AGM
     //Uma variável que indica o index da aresta que será ignorada
     //int ignorar = -1;
+
+     int quantidadeDeTestes;
+    cin >> quantidadeDeTestes;
+
+     int n, m;
+     int u, v, w;
+
+    for(int contadorDeTestes = 0; contadorDeTestes < quantidadeDeTestes; contadorDeTestes++){
  
-    int n, m; // numero de vertices e numero de arestas
+    // numero de vertices e numero de arestas
     cin >> n >> m;
  
-    int u, v, w; // extremos das arestas, e peso de cada aresta
+     // extremos das arestas, e peso de cada aresta
     for(int i = 0; i < m; i++)
     {
         cin >> u >> v >> w;
@@ -142,5 +150,6 @@ int main()
  
     cout << "Custo da primeira AGM: " << kruskall(arestas, n, m, primeiraAgm) << endl;
     cout << "Custo da segunda AGM: " << segundaMenorAgm(arestas, n, m, primeiraAgm) << endl;
+    }
     return 0;
 }

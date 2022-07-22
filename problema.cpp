@@ -111,6 +111,10 @@ int main()
     vector<pair<int, ii>> arestas;
     //lista para guardar o index das arestas da primeira AGM formada
     vector<int> primeiraAgm;   // Tem APENAS as que formar a AGM
+    // lista para guardar o resultado da primeira e segunda AGM respectivamente
+    vector<int> resultado;
+
+    int agm1 = 0, agm2 = 0;
     
     int quantidadeDeTestes;
     cin >> quantidadeDeTestes;
@@ -126,7 +130,18 @@ int main()
             cin >> u >> v >> w;
             arestas.push_back(make_pair(w, ii(u, v)));
         }
-        cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
+        
+        agm1 = kruskall(arestas, n, m, primeiraAgm);
+        agm2 = segundaMenorAgm(arestas, n, m, primeiraAgm);
+
+        resultado.push_back(agm1);
+        resultado.push_back(agm2);
+
+        //cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
+    }
+
+    for(int i = 0; i < resultado.size() - 1; i+=2){
+        cout << resultado[i] << " " << resultado[i+1] << endl;
     }
 
     return 0;

@@ -15,7 +15,7 @@ class UFDS
       {
           rank.assign(n, 0);
           p.assign(n, 0);
-          for(int i = 1; i < n+1; i++)                                                   // Problema tava aqui
+          for(int i = 0; i < n; i++)                                                   // Problema tava aqui
             p[i] = i;
       }
  

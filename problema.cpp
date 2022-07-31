@@ -12,14 +12,14 @@ using namespace std;
  */
 int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraAgm)
 {
-    primeiraAgm.clear();
+    //primeiraAgm.clear();
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
     sort(arestas.begin(), arestas.end());
  
     // custo da AGM
     int resultado = 0;
  
-    UFDS ufds(n); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
+    UFDS ufds(n+1); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
  
     int u, v;
     pair<int, ii> e;
@@ -57,7 +57,7 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
     // custo da AGM
     int resultado = 0;
 
-    UFDS ufds(n); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
+    UFDS ufds(n+1); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
 
     int u, v;
     pair<int, ii> e;
@@ -137,9 +137,14 @@ int main()
         resultado.push_back(agm1);
         resultado.push_back(agm2);
 
-        //cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
-    }
+        cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
 
+        primeiraAgm.clear();
+        arestas.clear();
+      
+        
+    }
+    cout << endl;
     for(int i = 0; i < resultado.size() - 1; i+=2){
         cout << resultado[i] << " " << resultado[i+1] << endl;
     }

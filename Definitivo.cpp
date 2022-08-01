@@ -211,7 +211,7 @@ int main()
     int quantidadeDeTestes;
     cin >> quantidadeDeTestes;
 
-    if( quantidadeDeTestes > 1 and  quantidadeDeTestes < 15){
+    if(( quantidadeDeTestes > 1) and  (quantidadeDeTestes < 15)){
         for(int contadorDeTestes = 0; contadorDeTestes < quantidadeDeTestes; contadorDeTestes++){
 
             int n, m; // numero de vertices e numero de arestas

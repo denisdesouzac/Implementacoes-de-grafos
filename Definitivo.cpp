@@ -192,10 +192,9 @@ int segundaMenorAgm(vector<pair<int, ii>> arestas2, int n, int m, vector<int> pr
         segundaOpcoes[i] = kruskall(arestas2, n, m, primeiraAgm[i]);
     }
     int limite = 0;
-    for(int i = 0; i<primeiraAgm.size(); i++){
+    for(unsigned i = 0; i<primeiraAgm.size(); i++){
         limite = limite + arestas2[primeiraAgm[i]].first;
     }
-    cout << "limite: " << limite << endl;
 
     return getMenor(segundaOpcoes, n-1, limite);
 }

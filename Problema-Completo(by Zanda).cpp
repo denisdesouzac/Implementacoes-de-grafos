@@ -104,7 +104,7 @@ class UFDS
  */
 int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraAgm)
 {
-    //primeiraAgm.clear();
+    primeiraAgm.clear();
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
     sort(arestas.begin(), arestas.end());
  
@@ -189,7 +189,7 @@ int segundaMenorAgm(vector<pair<int, ii>> arestas2, int n, int m, vector<int> pr
     sort(arestas2.begin(), arestas2.end());
 
     for(unsigned i=0; i<primeiraAgm.size(); i++){
-        segundaOpcoes[i] = kruskall(arestas2, n, m-1, primeiraAgm[i]);
+        segundaOpcoes[i] = kruskall(arestas2, n, m, primeiraAgm[i]);
     }
 
     return getMenor(segundaOpcoes, n-1);
@@ -231,15 +231,12 @@ int main()
 
         cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
 
-        primeiraAgm.clear();
-        arestas.clear();
+        //primeiraAgm.clear();
+        //arestas.clear();
       
         
     }
-    cout << endl;
-    for(unsigned i = 0; i < resultado.size() - 1; i+=2){
-        cout << resultado[i] << " " << resultado[i+1] << endl;
-    }
+    
 
     return 0;
 }

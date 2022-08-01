@@ -61,7 +61,7 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
     // custo da AGM
     int resultado = 0;
  
-    UFDS ufds(n); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
+    UFDS ufds(n+1); // codigo equivalente ao MAKE-SET(v) do pseudocodigo
  
     int u, v;
     pair<int, ii> e;

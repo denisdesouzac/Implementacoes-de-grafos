@@ -1,3 +1,20 @@
+/* 
+
+Dênis de Souza Cordeiro - 202110235 - 14A
+Gabriel Fernando Zanda Gonçalves - 202110234 - 14A
+Ronald Souza Galdino - 202110679 - 14A
+
+
+Lógica de nosso programa: 
+A ideia é basicamente que o 1° algoritmo de Kruskall "crie" (na verdade ele só manipula por referência) um VECTOR registrando as arestas
+pertencentes à primeira AGM (rodando kruskall normalmente e anotando o Index referente à posição das arestas na Lista de arestas). Em seguida, é chamado o 2° algoritmo 
+de kruskall, um pouco diferente do primeiro, ao invés de "criar" um VECTOR com as arestas que compoêm uma AGM, ele apenas recebe como parâmetro uma aresta por vez da 
+primeira AGM (proveninente do Vector do 1° algoritmo de kruskall), e a considera como a ser "IGNORADA" agora na composição da segunda AGM (assim garantindo que teremos
+uma segunda melhor opção de AGM), e como esse 2° algoritmo é rodado diversas vezes (até "ignorar" todas as arestas da primeira AGM), ele armazena num simples ARRAY a 
+soma das arestas de cada segunda melhor AGM encontrada e depois extrai a menor delas, resultando na SEGUNDA MELHOR AGM para o grafo.
+
+*/
+
 #include<iostream>
 #include<utility>
 #include<vector>
@@ -16,7 +33,7 @@ class UFDS
       {
           rank.assign(n, 0);
           p.assign(n, 0);
-          for(int i = 0; i < n; i++)                                                   // Problema tava aqui
+          for(int i = 0; i < n; i++)                                                   
             p[i] = i;
       }
  
@@ -102,9 +119,10 @@ class UFDS
  *  n: quantidade de vertices
  *  m: quantidade de arestas
  */
-int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraAgm)
+int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraAgm)     // Inserçao de um VECTOR "primeiraAgm" para registrar o Index das arestas que compoõem a primeira AGM.
 {
-    primeiraAgm.clear();
+    primeiraAgm.clear();    // Realizar a limpeza a cada nova busca por uma primeira AGM (afinal, usamos uma passagem por referência e não queremos que o grafo anterior interfira no NOVO).
+
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
     sort(arestas.begin(), arestas.end());
  
@@ -124,11 +142,11 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraA
         v = e.second.second;
         if(!ufds.mesmoConjunto(u, v))
         {
-            primeiraAgm.push_back(i);               //Adiciona na primeira AGM        
+            primeiraAgm.push_back(i);               //Adiciona no VECTOR "primeiraAgm" o Index dessa aresta que será unida no Disjoint-Set (quer dizer que ela compõe a primeira AGM).
             resultado += e.first;
             numero_arestas++;
             if(numero_arestas == n-1)
-              break;
+                break;
          
             ufds.uniao(u, v);
         }
@@ -137,10 +155,7 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, vector<int>& primeiraA
     return resultado;
 }
 
-//_____________________________________________________________________________________________________________________________
-// Parte que a gnt fez
-
-// Sobrecarga da função
+// Sobrecarga do algoritmo de Kruskall (esse é o segundo, que recebe uma aresta a ser "ignorada" por vez).
 int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
 {
     // ordenacao em O(mlogm), de acordo com https://www.cplusplus.com/reference/algorithm/sort/?kw=sort
@@ -160,7 +175,7 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
         e = arestas[i];
         u = e.second.first;
         v = e.second.second;
-        if(!ufds.mesmoConjunto(u, v) and i != ignorar)
+        if(!ufds.mesmoConjunto(u, v) and i != ignorar)      // "and" usado para garantir que não estamos considerando a aresta recebida como "ignorada", para procurarmos AG diferentes da primeira.
         {
             resultado += e.first;
             numero_arestas++;
@@ -174,6 +189,7 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
     return resultado;
 }
 
+// Função que retorna o MENOR valor presente no array de segundas opções de AGM (array que armazena apenas o somatório do valor das arestas de cada opção para AGM).
 int getMenor(int arr[], int n, int limite){
     int menor = arr[0];
     for(int i=0; i<n; i++){
@@ -184,6 +200,13 @@ int getMenor(int arr[], int n, int limite){
     return menor;
 }
 
+/*
+
+Função que constitui o processo para encontrar a SEGUNDA MELHOR AGM ( declara o array com as segundas opções, faz novamente um ".sort()" na Lista de Arestas, chama diversas vezes o 2° algoritmo
+de Kruskall (passando como parâmetro o Index da aresta a ser ignorada,proveniente do VECTOR da primeira AGM), e ainda estabelece como "limite" o valor do somatório das aresta a primeira AGM ( para 
+caso tenhamos a ocorrência de um grafo onde temos PONTES presentes na primeira AGM, o que inviabiliza o "caminhamento" do algoritmo de Kruskall, resultando em uma 2° AGM < 1° AGM, o que é incoerente).
+
+*/ 
 int segundaMenorAgm(vector<pair<int, ii>> arestas2, int n, int m, vector<int> primeiraAgm){
     int segundaOpcoes[n-1];
     sort(arestas2.begin(), arestas2.end());
@@ -191,7 +214,9 @@ int segundaMenorAgm(vector<pair<int, ii>> arestas2, int n, int m, vector<int> pr
     for(unsigned i=0; i<primeiraAgm.size(); i++){
         segundaOpcoes[i] = kruskall(arestas2, n, m, primeiraAgm[i]);
     }
+
     int limite = 0;
+    
     for(unsigned i = 0; i<primeiraAgm.size(); i++){
         limite = limite + arestas2[primeiraAgm[i]].first;
     }

@@ -211,23 +211,25 @@ int main()
     int quantidadeDeTestes;
     cin >> quantidadeDeTestes;
 
-    for(int contadorDeTestes = 0; contadorDeTestes < quantidadeDeTestes; contadorDeTestes++){
+    if( quantidadeDeTestes > 1 and  quantidadeDeTestes < 15){
+        for(int contadorDeTestes = 0; contadorDeTestes < quantidadeDeTestes; contadorDeTestes++){
 
-        int n, m; // numero de vertices e numero de arestas
-        cin >> n >> m;
-        
-        int u, v, w; // extremos das arestas, e peso de cada aresta
-        for(int i = 0; i < m; i++)
-        {
-            cin >> u >> v >> w;
-            arestas.push_back(make_pair(w, ii(u, v)));
+            int n, m; // numero de vertices e numero de arestas
+            cin >> n >> m;
+
+            if((n > 3) and (n < 300)){
+                int u, v, w; // extremos das arestas, e peso de cada aresta
+                for(int i = 0; i < m; i++){
+                    cin >> u >> v >> w;
+                    if((w > 1) and (w < 300)){
+                        arestas.push_back(make_pair(w, ii(u, v)));
+                    }
+                }
+                cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
+                primeiraAgm.clear();
+                arestas.clear();
+            }      
         }
-
-        cout << kruskall(arestas, n, m, primeiraAgm) << " " << segundaMenorAgm(arestas, n, m, primeiraAgm)<< endl;
-
-        primeiraAgm.clear();
-        arestas.clear();
-      
     }
     return 0;
 }

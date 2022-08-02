@@ -191,7 +191,7 @@ int kruskall(vector<pair<int, ii>> arestas, int n, int m, int ignorar)
 
 // Função que retorna o MENOR valor presente no array de segundas opções de AGM (array que armazena apenas o somatório do valor das arestas de cada opção para AGM).
 int getMenor(int arr[], int n, int limite){
-    int menor = arr[0];
+    int menor = limite;
     for(int i=0; i<n; i++){
         if(arr[i]<menor and arr[i]>=limite){
             menor = arr[i];

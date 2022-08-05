@@ -11,95 +11,105 @@ using namespace std;
 #define CINZA 1 // vertice descoberto
 #define PRETO 2 // vertice fechado
 
-int main()
-{  
+int main(){  
+
   int n, m, l, p;
   cin >> n >> m >> l >> p;
 
-  while(!cin.eof())
+  int cont = 1;
+
+  while((n != 0) and (m != 0) and (l != 0) and (p != 0))
   {
-    // alocando as estruturas auxiliares
-    int* dist = new int[n+1]; // distancia de todos os vertices em relacao a origem s
-    int* pai = new int[n+1]; // armazena o pai de cada vertice
-    int* cor = new int[n+1]; // armazena a cor de cada vertice
-    
-    // iniciando as estruturas auxiliares
-    for(int i = 1; i <= n; i++)
-    {
+      // alocando as estruturas auxiliares
+      int* dist = new int[n+1]; // distancia de todos os vertices em relacao a origem s
+      int* pai = new int[n+1]; // armazena o pai de cada vertice
+      int* cor = new int[n+1]; // armazena a cor de cada vertice
+      
+      // iniciando as estruturas auxiliares
+      for(int i = 1; i <= n; i++)
+      {
         dist[i] = 0;
         pai[i] = -1;
         cor[i] = BRANCO;
-    }
-   
-    vector<int>* lista_adj = new vector<int>[n+1];
+      }
+      
+      vector<int>* lista_adj = new vector<int>[n+1];
 
-    // leitura do grafo
-    int u, v;
-    for(int i = 0; i < m; i++)
-    {
-      cin >> u >> v; // lendo as arestas do grafo
-
-      // evitando a leitura de vertices repetidos nas listas
-      if(find(lista_adj[u].begin(), lista_adj[u].end(), v) != lista_adj[u].end())
+      // leitura do grafo
+      int u, v;
+      for(int i = 0; i < m; i++)
       {
-        continue;
+        cin >> u >> v; // lendo as arestas do grafo
+
+        // evitando a leitura de vertices repetidos nas listas
+        if(find(lista_adj[u].begin(), lista_adj[u].end(), v) != lista_adj[u].end())
+        {
+          continue;
+       }
+
+        // grafo nao-orientado
+        lista_adj[u].push_back(v); //u -> v
+        lista_adj[v].push_back(u); //v -> u
       }
 
-      // grafo nao-orientado
-      lista_adj[u].push_back(v); //u -> v
-      lista_adj[v].push_back(u); //v -> u
-    }
+      int s = l; // vertice origem
+      queue<int> fila; // fila de vertices a serem explorados na BFS
+      fila.push(s);
+      cor[s] = CINZA;
 
-    int s = l; // vertice origem
-    queue<int> fila; // fila de vertices a serem explorados na BFS
-    fila.push(s);
-    cor[s] = CINZA;
-   
-    //para cada um que nao vai na festa, reduz o numero dos seus amigos
-    while(p > 0)
-    {
-      int u = fila.front();
-      fila.pop();
-      cor[u]= PRETO;
+      bool percorreu = false;
+      
+      //para cada um que nao vai na festa, reduz o numero dos seus amigos
+      while(p > 0)
+      {
+        int u = fila.front();
+        fila.pop();
+        cor[u]= PRETO;
 
-      for(auto it = lista_adj[u].begin(); it != lista_adj[u].end(); it++)
-      { 
-          // se o vertice ainda nao foi descoberto
-          if(cor[*it] == BRANCO)
-          {
+
+        cout << "Teste" << " " << cont << endl;
+        for(auto it = lista_adj[u].begin(); it != lista_adj[u].end(); it++)
+        { 
+            // se o vertice ainda nao foi descoberto
+            if(cor[*it] == BRANCO)
+            {
               cor[*it] = CINZA;
               pai[*it] = u;
               dist[*it] = dist[u] + 1;
-          }   
+
+              cout << *it << " ";
+            }   
+        }
+        cout << endl;
+        p--;
+
+       //cout << "Teste" << " " << cont << endl;
+        //for(auto it = lista_adj[u].begin(); it != lista_adj[u].end(); it++){
+        //  cout << *it << ' ';
+       //}
       }
-      p--;
-
-      cout << "Saida: ";
-      for(auto it = lista_adj[u].begin(); it != lista_adj[u].end(); it++){
-        cout << *it << ' ';
+      
+      /* cout << "Distancias" << endl;
+      for(int k = 1; k <= n; k++)
+      {
+          cout << "dist[" << k << "]: " << dist[k] << endl;
       }
-    }
-   
-    /* cout << "Distancias" << endl;
-    for(int k = 1; k <= n; k++)
-    {
-        cout << "dist[" << k << "]: " << dist[k] << endl;
-    }
-   
-    cout << "Pai" << endl;
-    for(int k = 1; k <= n; k++)
-    {
-        cout << "pai[" << k << "]: " << pai[k] << endl;
-    }
-    cout << "*** *** ***" << endl; */
+      
+      cout << "Pai" << endl;
+      for(int k = 1; k <= n; k++)
+      {
+          cout << "pai[" << k << "]: " << pai[k] << endl;
+      }
+      cout << "*** *** ***" << endl; */
 
+      
+      delete[] pai;
+      delete[] cor;
+      delete[] dist;
 
-   
-    delete[] pai;
-    delete[] cor;
-    delete[] dist;
-    
-    // cin >> n >> m;
+      cont++;
+      
+      cin >> n >> m >> l >> p;
   }
 
 return 0;

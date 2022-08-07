@@ -1,7 +1,7 @@
 /*
-    Dênis de Souza Cordeiro - 202110235
-    Gabriel Zanda
-    Ronald de Souza Galdino - 
+    Dênis de Souza Cordeiro - 202110235 - 14A
+    Gabriel Fernando Zanda Gonçalves - 202110234 - 14A
+    Ronald de Souza Galdino - 202110679 - 14A
 */
 #include<iostream>
 #include<vector>

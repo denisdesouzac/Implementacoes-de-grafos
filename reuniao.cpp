@@ -87,7 +87,7 @@ int main(){
         maior = resultados[i];
         for(int j = 0; j < m; j++){
             if(i!= j){
-                if(MA[i][j] > maior and MA[i][j] != 0){
+                if(MA[i][j] > maior){
                     maior = MA[i][j];
                 }    
             }

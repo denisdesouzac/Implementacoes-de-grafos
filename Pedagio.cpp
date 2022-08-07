@@ -11,106 +11,103 @@ using namespace std;
 #define CINZA 1 // vertice descoberto
 #define PRETO 2 // vertice fechado
 
-int main(){  
+int main()
+{  
+	int contador = 0; // Contador para as impressões dos casos teste
 
-  int n, m, l, p;
-  cin >> n >> m >> l >> p;
+	while(true)
+	{
+		int n; // Arestas (cidades)
+		int m; // Vertices (estradas)
+		int l; // Ponto inicial
+		int p; // Max de pedagios
+		
+		contador++;
 
-  int cont = 1;
+		cin >> n >> m >> l >> p;
 
-  while((n != 0) and (m != 0) and (l != 0) and (p != 0))
-  {
-      // alocando as estruturas auxiliares
-      int* dist = new int[n+1]; // distancia de todos os vertices em relacao a origem s
-      int* pai = new int[n+1]; // armazena o pai de cada vertice
-      int* cor = new int[n+1]; // armazena a cor de cada vertice
-      
-      // iniciando as estruturas auxiliares
-      for(int i = 1; i <= n; i++)
-      {
-        dist[i] = 0;
-        pai[i] = -1;
-        cor[i] = BRANCO;
-      }
-      
-      vector<int>* lista_adj = new vector<int>[n+1];
+		if( (n and m and m and l and p) == 0){  // Terminar o programa com a entrada "0 0 0 0"
+			return 0;
+		}
 
-      // leitura do grafo
-      int u, v;
-      for(int i = 0; i < m; i++)
-      {
-        cin >> u >> v; // lendo as arestas do grafo
+		// alocando as estruturas auxiliares
+		int* dist = new int[n+1]; // distancia de todos os vertices em relacao a origem s
+		int* pai = new int[n+1]; // armazena o pai de cada vertice
+		int* cor = new int[n+1]; // armazena a cor de cada vertice
+		
+		// iniciando as estruturas auxiliares
+		for(int i = 1; i <= n; i++)
+		{
+			dist[i] = 0;
+			pai[i] = -1;
+			cor[i] = BRANCO;
+		}
 
-        // evitando a leitura de vertices repetidos nas listas
-        if(find(lista_adj[u].begin(), lista_adj[u].end(), v) != lista_adj[u].end())
-        {
-          continue;
-       }
+		vector<int>* lista_adj = new vector<int>[n+1];
 
-        // grafo nao-orientado
-        lista_adj[u].push_back(v); //u -> v
-        lista_adj[v].push_back(u); //v -> u
-      }
+		// leitura do grafo
+		int u, v;
+		for(int i = 0; i < m; i++)
+		{
+			cin >> u >> v; // lendo as arestas do grafo
 
-      int s = l; // vertice origem
-      queue<int> fila; // fila de vertices a serem explorados na BFS
-      fila.push(s);
-      cor[s] = CINZA;
+			// evitando a leitura de vertices repetidos nas listas
+			if(find(lista_adj[u].begin(), lista_adj[u].end(), v) != lista_adj[u].end())
+			{
+				continue;
+			}
 
-      bool percorreu = false;
-      
-      //para cada um que nao vai na festa, reduz o numero dos seus amigos
-      while(p > 0)
-      {
-        int u = fila.front();
-        fila.pop();
-        cor[u]= PRETO;
+			// grafo nao-orientado
+			lista_adj[u].push_back(v); //u -> v
+			lista_adj[v].push_back(u); //v -> u
+		}
+
+		int s = l; // vertice origem é o l
+		queue<int> fila; // fila de vertices a serem explorados na BFS
+		fila.push(s);     // Empilha esse V "origem"
+		cor[s] = CINZA;  // Marca ele como já mapeado
+
+		cout << "Teste " << contador << endl;
+
+		vector <int> opcoes; // Vector com as opcoes de viagem
+		int distMax = 0; // Contador da distância max percorrida (Funciona para uma busca em largura, pois sempre vai buscar os vizinhos com mesma distância (primeiro os com Dist = 1, em seguida Dist = 2, ....))
+
+		while(distMax <= p and !fila.empty() ) // Enquando a distância dos vizinhos ainda estiver dentro do estipulado em "p" e a Fila não estiver vazia
+		{
+			int u = fila.front(); // u será igual o primeiro da Fila 
+			fila.pop(); // Tira esse primeiro da fila 
+			cor[u]= PRETO; // Marca como já visitado 
 
 
-        cout << "Teste" << " " << cont << endl;
-        for(auto it = lista_adj[u].begin(); it != lista_adj[u].end(); it++)
-        { 
-            // se o vertice ainda nao foi descoberto
-            if(cor[*it] == BRANCO)
-            {
-              cor[*it] = CINZA;
-              pai[*it] = u;
-              dist[*it] = dist[u] + 1;
+			for(auto it = lista_adj[u].begin(); it != lista_adj[u].end(); it++) // Vai percorrer toda a L.Adj dessa origam
+			{ 
+				// se o vertice ainda nao foi descoberto (apenas os outros que estão brancos).
+				if(cor[*it] == BRANCO)
+				{
+					cor[*it] = CINZA; // Vizinhos já mapeados são cinzas
+					pai[*it] = u;   // Pai desses mapeados agora é o u
+					dist[*it] = dist[u] + 1;  // Setta a distância deles
+					fila.push(*it); // Enfileira esse vizinho
+					distMax = dist[*it]; // Setta a distância máxima
+					if(distMax <= p){
+						opcoes.push_back(*it); // Coloca esse vizinho no VECTOR de opcoes de viagem (somente se sua distância estiver dentro do valor de "p")
+					}
+				}
+			}
+		}
 
-              cout << *it << " ";
-            }   
-        }
-        cout << endl;
-        p--;
+		// Coloca em ordem crescente a saída, e imprime as opções de viagem
+		sort(opcoes.begin(), opcoes.end());
+		for(auto it = opcoes.begin(); it != opcoes.end(); it++){
+			cout << *it << ' ';
+		}
 
-       //cout << "Teste" << " " << cont << endl;
-        //for(auto it = lista_adj[u].begin(); it != lista_adj[u].end(); it++){
-        //  cout << *it << ' ';
-       //}
-      }
-      
-      /* cout << "Distancias" << endl;
-      for(int k = 1; k <= n; k++)
-      {
-          cout << "dist[" << k << "]: " << dist[k] << endl;
-      }
-      
-      cout << "Pai" << endl;
-      for(int k = 1; k <= n; k++)
-      {
-          cout << "pai[" << k << "]: " << pai[k] << endl;
-      }
-      cout << "*** *** ***" << endl; */
+		cout << endl << endl;
 
-      
-      delete[] pai;
-      delete[] cor;
-      delete[] dist;
-
-      cont++;
-      
-      cin >> n >> m >> l >> p;
-  }
+		delete[] pai;
+		delete[] cor;
+		delete[] dist;
+	}
 
 return 0;
 }

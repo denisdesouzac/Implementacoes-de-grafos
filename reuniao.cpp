@@ -46,9 +46,9 @@ void preencherVertor(int vetor[], int tamanho){
 
 int floyd_warshall(){
     for(int k = 0; k < n; k++)
-      for(int i = 0; i < n; i++)
-        for(int j = 0; j < n; j++)
-          MA[i][j] = min(MA[i][j], MA[i][k] + MA[k][j]);
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                MA[i][j] = min(MA[i][j], MA[i][k] + MA[k][j]);
 }
 
 int main(){

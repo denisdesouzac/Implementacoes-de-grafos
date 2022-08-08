@@ -51,14 +51,6 @@ int floyd_warshall(){
           MA[i][j] = min(MA[i][j], MA[i][k] + MA[k][j]);
 }
 
-void imprimirMA(){
-    for(int i = 0; i < m; i++){
-        for(int j = 0; j < n; j++){
-            cout << MA[i][j] << " ";
-        }
-    }
-}
-
 int main(){
 
     cin >> n >> m;
@@ -85,7 +77,7 @@ int main(){
     int maior;
     for(int i = 0; i < n; i++){
         maior = resultados[i];
-        for(int j = 0; j < m; j++){
+        for(int j = 0; j < n; j++){
             if(i!= j){
                 if(MA[i][j] > maior){
                     maior = MA[i][j];
@@ -98,6 +90,12 @@ int main(){
     int resultado = getMenor(resultados);
     cout << resultado << endl;
 
+    //Desalocar memória
+    for (int i = 0; i < n; i++){
+        // aqui se desalocam as colunas de cada linha
+        delete[] MA[i];
+    }
+    delete[] MA; // aqui se desalocam as linhas
 
     return 0;
 }

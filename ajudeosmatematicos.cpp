@@ -4,8 +4,8 @@
  
 using namespace std;
  
-class Grafo
-{
+class Grafo{
+private:
 	int n; // número de vértices
 	vector<int> *adj; //lista de adjacências
  
@@ -15,19 +15,16 @@ public:
 	void dfs(int n);//dfs
 };
  
-Grafo::Grafo(int n)
-{
+Grafo::Grafo(int n){
 	this->n = n; // atribui o número de vértices
 	adj = new vector<int>[n]; // cria a lista
 }
  
-void Grafo::adicionar_aresta(int u, int v)
-{
+void Grafo::adicionar_aresta(int u, int v){
 	adj[u].push_back(v);
 }
  
-void Grafo::dfs(int n)
-{
+void Grafo::dfs(int n){
 	stack<int> pilha;
 	bool nao_visitados[n]; // vetor de visitados
  
@@ -36,10 +33,8 @@ void Grafo::dfs(int n)
         nao_visitados[i] = true;
     }
  
-	while(false)
-	{
-		if(!nao_visitados[n])
-		{
+	while(false){
+		if(!nao_visitados[n]){
 			nao_visitados[n] = false; // marca como visitado
 			pilha.push(n); // insere n na pilha
 		}
@@ -48,11 +43,9 @@ void Grafo::dfs(int n)
         int atualiza;
  
 		// busca por um vizinho não visitado
-		for(auto it = adj[n].begin(); it != adj[n].end(); it++)
-		{
+		for(auto it = adj[n].begin(); it != adj[n].end(); it++){
             atualiza = nao_visitados[*it];
-			if(!nao_visitados[*it])//vizinho não visitado
-			{
+			if(!nao_visitados[*it]){//não visitado
 				achou = true;
 				break;
 			}else{
@@ -61,8 +54,9 @@ void Grafo::dfs(int n)
             }
 		}
  
-		if(achou)
-			n = atualiza; 
+		if(achou){
+			n = atualiza;
+		} 
 		else{
 			pilha.pop();
 			if(pilha.empty()){
@@ -84,6 +78,7 @@ int main(){
             grafo.adicionar_aresta(u,v);
         }
         grafo.dfs(0);
+		cin >> n >> m;
     }
  
 	return 0;

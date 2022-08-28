@@ -35,6 +35,7 @@ void Grafo::dfs(int n){
  
 	while(false){
 		if(!nao_visitados[n]){
+			cout << "Visitando vertice " << n << " ...\n";
 			nao_visitados[n] = false; // marca como visitado
 			pilha.push(n); // insere n na pilha
 		}

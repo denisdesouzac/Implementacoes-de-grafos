@@ -11,17 +11,21 @@ int** MA;
 int* pai;
 int* cor;
 int nCiclos = 0;
-vector<vector<int>> ciclos;
-vector<int> cicloMenor;
+vector<vector<int>> ciclos(2);
+
+void checkResize(){
+    if(nCiclos == 2){
+        ciclos.resize(nCiclos+2);
+    }
+}
 
 void registarCiclo(int comecar, int parar){
     cout << "to aqui";
     if(comecar >= parar){
-        cicloMenor.push_back(comecar);
+        ciclos[nCiclos].push_back(comecar);
         registarCiclo(pai[comecar-1], parar);
     } 
-    ciclos.push_back(cicloMenor);
-    cicloMenor.clear();
+
 }
 
 void dfs(int start1, int n){
@@ -36,7 +40,11 @@ void dfs(int start1, int n){
 		if ( MA[start1-1][start2-1] >= 1 and (cor[start2-1] == BRANCO)){ 
             // Verificar se temos ciclos formados por arestas paralelas
             if( MA[start1-1][start2-1] > 1){
+            ciclos[nCiclos].push_back(start2);
+            ciclos[nCiclos].push_back(start1);
+            ciclos[nCiclos].push_back(start2);
             nCiclos += (MA[start1-1][start2-1]/2);
+            checkResize();
             }
             pai[start2-1] = start1;
 			dfs(start2, n);
@@ -45,9 +53,10 @@ void dfs(int start1, int n){
             //cout << endl <<"Achei um ciclo" << endl;
             //ciclos[0][nCiclos].push_back(start2);
             //registarCiclo(start1, start2);
-            cicloMenor.push_back(start2);
+            ciclos[nCiclos].push_back(start2);
             registarCiclo(start1, start2);
             nCiclos = nCiclos+1;
+            checkResize();
         }
 	}
     //cout << endl << start1 << "foi fechado" << endl;
@@ -109,7 +118,12 @@ int main(){
     }
 
     //Print Ciclos
-    cout << ciclos[1][0];
+    for(int u = 0; u < nCiclos; u++){
+        for(int v = 0; v < ciclos[u].size(); v++){
+            cout << " " << ciclos[u][v]  << " ";
+        }
+        cout << endl;
+    }
 
 
     // cout << "Vetor pai: " << pai[0] << pai[1] << pai[2] << endl;

@@ -7,49 +7,63 @@ using namespace std;
 #define CINZA 1
 #define PRETO 2
 
-int** MA;
-int* pai;
-int* cor;
-int nCiclos = 0;
-vector<vector<int>> ciclos(10);
+int** MA;   // Matriz de Adjacência
+int* pai;   // Array de pais de cada vértice
+int* cor;   // Array de cores de cada vértice
+int nCiclos = 0;    // Contador para o número de ciclos encontrados
+vector<vector<int>> ciclos(2); // Vector bidimensional para armazenar os ciclos
 
+// Função para verificar quando há necessidade de redimensionar o Vector de Ciclos (adiciona 2 espaços por vez)
+void checkResize(){ 
+    if(nCiclos == 2){
+        ciclos.resize(nCiclos+2);
+    }
+}
+
+/* 
+Função recursiva para registrar um ciclo encontrado (adiciona o vértice atual e vai "voltando" pelos pais até montar o ciclo, 
+parando ao encontrar o vértice CINZA que declarou o encontro do ciclo. 
+*/
 void registarCiclo(int comecar, int parar){
-    cout << "to aqui";
     if(comecar >= parar){
         ciclos[nCiclos].push_back(comecar);
         registarCiclo(pai[comecar-1], parar);
     } 
-
 }
 
+/*
+ Função da Busca em largura sendo realizada em uma Matiz, ela utiliza como referência um "start1" como sendo as LINHAS e um "start2" como COLUNAS,
+ fazendo assim o caminhamento pela matriz e realizando uma BUSCA EM PROFUNDIDADE de maneira RECURSIVA.
+ Ao encontrar com um número ">1" temos um ciclo composto de arestas paralelas.
+ Ao encontrar com um vértice CINZA (já mapeado) temos um ciclo próprio e a função de registro é chamada.
+*/
 void dfs(int start1, int n){
     cout << start1 << " -> ";
-    cor[start1-1] = CINZA;
+    cor[start1-1] = CINZA;  // Marcando o vértice atual como CINZA
 
-    // For every node of the graph
 	for (int start2 = 1; start2 <= n; start2++) {
-
-		// If some node is adjacent to the current node
-		// and it has not already been visited
+		// Caso para visitar o vizinho BRANCO
 		if ( MA[start1-1][start2-1] >= 1 and (cor[start2-1] == BRANCO)){ 
-            // Verificar se temos ciclos formados por arestas paralelas
+            // Verificar se temos ciclos formados por arestas paralelas (caso haja, o ciclo é montado diretamente aqui)
             if( MA[start1-1][start2-1] > 1){
-            nCiclos += (MA[start1-1][start2-1]/2);
+                ciclos[nCiclos].push_back(start2);
+                ciclos[nCiclos].push_back(start1);
+                ciclos[nCiclos].push_back(start2);
+                nCiclos += (MA[start1-1][start2-1]/2); // Operação para ver QUANTOS ciclos são (considerando que podemos ter mais de 2 arestas paralelas)
+                checkResize(); // Verificação de redimensionamento
             }
             pai[start2-1] = start1;
-			dfs(start2, n);
+			dfs(start2, n);     // Chamada recursiva
 		}
+        // Caso onde temos um ciclo PRÓPRIO
         else if( MA[start1-1][start2-1] >= 1 and (pai[start1-1] != start2) and ( cor[start2-1] == CINZA) ){
-            //cout << endl <<"Achei um ciclo" << endl;
-            //ciclos[0][nCiclos].push_back(start2);
-            //registarCiclo(start1, start2);
             ciclos[nCiclos].push_back(start2);
-            registarCiclo(start1, start2);
+            registarCiclo(start1, start2);  // Chamada da função para registar esse ciclo
             nCiclos = nCiclos+1;
+            checkResize();  // Verificação de redimensionamento
         }
 	}
-    //cout << endl << start1 << "foi fechado" << endl;
-    cor[start1-1] = PRETO;
+    cor[start1-1] = PRETO;  // "Fechamento" do vértice
 }
 
 int main(){
@@ -60,7 +74,6 @@ int main(){
     pai = new int[n];
     cor = new int[n];
     MA = new int*[n];   // Matriz de adj = Vetor de Vetores
-    //ciclos = new vector<vector<int>>[n]; 
     
 
     // Aloca os outros vetores e ajusa o estado inicial da matriz
@@ -79,7 +92,7 @@ int main(){
     for(int i = 1; i <= m; i++){
         cin >> u >> v; // lendo as arestas do grafo
         
-        // MA
+        // MA (insere a quantiade necessária de arestas)
         MA[u-1][v-1]++;
         MA[v-1][u-1]++;
     }
@@ -113,10 +126,6 @@ int main(){
         }
         cout << endl;
     }
-
-
-    // cout << "Vetor pai: " << pai[0] << pai[1] << pai[2] << endl;
-    // cout << "Vetor cor: " << cor[0] << cor[1] << cor[2] << endl;
 
 
     // Desalocação de memória

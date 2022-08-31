@@ -15,7 +15,7 @@ vector<vector<int>> ciclos(2); // Vector bidimensional para armazenar os ciclos
 
 // Função para verificar quando há necessidade de redimensionar o Vector de Ciclos (adiciona 2 espaços por vez)
 void checkResize(){ 
-    if(nCiclos == 2){
+    if(nCiclos == ciclos.size()){
         ciclos.resize(nCiclos+2);
     }
 }

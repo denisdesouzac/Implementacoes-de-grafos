@@ -6,17 +6,21 @@ using namespace std;
 #define BRANCO 0
 #define CINZA 1
 #define PRETO 2
+#define AZUL 3
 
 int** MA;   // Matriz de Adjacência
 int* pai;   // Array de pais de cada vértice
 int* cor;   // Array de cores de cada vértice
 int nCiclos = 0;    // Contador para o número de ciclos encontrados
 vector<vector<int>> ciclos(2); // Vector bidimensional para armazenar os ciclos
+vector<int> ondeTemosX;
+vector<int> ondeTemosY;
+
 
 // Função para verificar quando há necessidade de redimensionar o Vector de Ciclos (adiciona 2 espaços por vez)
 void checkResize(){ 
     if(nCiclos == ciclos.size()){
-        ciclos.resize(nCiclos+2);
+        ciclos.resize(ciclos.size()+2);
     }
 }
 
@@ -31,6 +35,16 @@ void registarCiclo(int comecar, int parar){
     } 
 }
 
+// Função que faz o registro do ciclo formado por arestas paralelas
+void registarCicloParalelo(int start1, int start2){
+    for( int i =0; i < (MA[start1-1][start2-1]/2); i++ ){
+        ciclos[nCiclos].push_back(start1);
+        ciclos[nCiclos].push_back(start2);
+        nCiclos++;
+        checkResize();  // Verificação de redimensionamento
+    }
+}
+
 /*
  Função da Busca em largura sendo realizada em uma Matiz, ela utiliza como referência um "start1" como sendo as LINHAS e um "start2" como COLUNAS,
  fazendo assim o caminhamento pela matriz e realizando uma BUSCA EM PROFUNDIDADE de maneira RECURSIVA.
@@ -38,7 +52,7 @@ void registarCiclo(int comecar, int parar){
  Ao encontrar com um vértice CINZA (já mapeado) temos um ciclo próprio e a função de registro é chamada.
 */
 void dfs(int start1, int n){
-    cout << start1 << " -> ";
+    cout << " * " << start1;
     cor[start1-1] = CINZA;  // Marcando o vértice atual como CINZA
 
 	for (int start2 = 1; start2 <= n; start2++) {
@@ -46,10 +60,7 @@ void dfs(int start1, int n){
 		if ( MA[start1-1][start2-1] >= 1 and (cor[start2-1] == BRANCO)){ 
             // Verificar se temos ciclos formados por arestas paralelas (caso haja, o ciclo é montado diretamente aqui)
             if( MA[start1-1][start2-1] > 1){
-                ciclos[nCiclos].push_back(start2);
-                ciclos[nCiclos].push_back(start1);
-                ciclos[nCiclos].push_back(start2);
-                nCiclos += (MA[start1-1][start2-1]/2); // Operação para ver QUANTOS ciclos são (considerando que podemos ter mais de 2 arestas paralelas)
+                registarCicloParalelo(start1, start2); // Função para Registrar ciclos de arestas paralelas
                 checkResize(); // Verificação de redimensionamento
             }
             pai[start2-1] = start1;
@@ -57,7 +68,6 @@ void dfs(int start1, int n){
 		}
         // Caso onde temos um ciclo PRÓPRIO
         else if( MA[start1-1][start2-1] >= 1 and (pai[start1-1] != start2) and ( cor[start2-1] == CINZA) ){
-            ciclos[nCiclos].push_back(start2);
             registarCiclo(start1, start2);  // Chamada da função para registar esse ciclo
             nCiclos = nCiclos+1;
             checkResize();  // Verificação de redimensionamento
@@ -66,10 +76,91 @@ void dfs(int start1, int n){
     cor[start1-1] = PRETO;  // "Fechamento" do vértice
 }
 
+void pesquisarV(int v, vector<int> &ondeTemosV){
+    for(int i = 0; i < nCiclos; i++){
+        for (int u : ciclos[i]){
+            if( v == u ){
+                ondeTemosV.push_back(i);
+            }
+        }
+    }
+}
+
+int buscarSubGrafo(int x, int y){
+    vector<int> ondeTemosV;
+    pesquisarV(x, ondeTemosV);
+    for( int a : ondeTemosV){
+        for(int i : ciclos[a]){
+            cor[i-1] = AZUL;
+            if( i == y ){
+                return 1;
+            }
+            else if( i != x and cor[i-1] != AZUL){
+                buscarSubGrafo(i, y);
+            }
+        }
+    }
+
+    /* for( aux; aux < nCiclos; aux++){
+        for (int u : ciclos[aux]){
+            cor[u-1] = AZUL;
+            if( u == y ){
+                cout << 1 << " FIM" << endl;
+                return 1;
+            }
+            else if( u != x and cor[u-1] != AZUL ){
+                buscarSubGrafo( u, y, aux );
+            }
+        }
+    } */
+
+    return 0;
+}
+
+int verificarXY(int x, int y){
+
+    for(int i = 0; i < nCiclos; i++){
+        for (int u : ciclos[i]){
+            if( x == u ){
+                ondeTemosX.push_back(i);
+            }
+            if( y == u ){
+                ondeTemosY.push_back(i);
+            }
+        }
+    }
+
+    cout << "Onde temos " << x << ": " << endl;
+    if(ondeTemosX.size() == 0){
+        cout << "*vazio* -> PRINT 0" << endl;
+    }
+    else{
+        for( int i : ondeTemosX){
+            cout << i << " ";
+        }
+        cout << endl;
+    }
+
+    cout << "Onde temos " << y << ": " << endl;
+    if(ondeTemosY.size() == 0){
+        cout << "*vazio* -> PRINT 0" << endl;
+    }
+    else{
+        for( int i : ondeTemosY){
+            cout << i << " ";
+        }
+        cout << endl;
+    }
+
+    cout << buscarSubGrafo(x,y) << " ESSA É A SAÍDA" << endl;
+
+    return 0;
+}
+
 int main(){
 
     // Iniciação e Declaração das estruturas
-    int n, m;
+    int n, m, x, y;
     cin >> n >> m;
     pai = new int[n];
     cor = new int[n];
@@ -96,7 +187,8 @@ int main(){
         MA[u-1][v-1]++;
         MA[v-1][u-1]++;
     }
-    
+
+    /*  
     //Print MatAdj
     for(int u = 0; u < n; u++){
         for(int v = 0; v < n; v++){
@@ -104,6 +196,8 @@ int main(){
         }
         cout << endl;
     }
+    */
+
 
     //Print DFS
     cout << endl;
@@ -111,6 +205,7 @@ int main(){
     cout << endl;
     cout << "nCIclos: " << nCiclos << endl;
 
+    /* 
     //Print MatAdj
     for(int u = 0; u < n; u++){
         for(int v = 0; v < n; v++){
@@ -118,6 +213,7 @@ int main(){
         }
         cout << endl;
     }
+    */
 
     //Print Ciclos
     for(int u = 0; u < nCiclos; u++){
@@ -126,7 +222,12 @@ int main(){
         }
         cout << endl;
     }
+    
+    // Entrada de X e Y
+    cin >> x >> y;
 
+    // Função de verificação de X e Y (averiguar se eles estão em um ciclo cada, ou dentro do mesmo)
+    verificarXY(x,y);
 
     // Desalocação de memória
     delete[] pai;

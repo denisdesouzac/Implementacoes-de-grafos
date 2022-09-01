@@ -15,7 +15,7 @@ using namespace std;
 int** MA;   // Matriz de Adjacência
 int* pai;   // Array de pais de cada vértice
 int* cor;   // Array de cores de cada vértice
-int nCiclos;    // Contador para o número de ciclos encontrados
+unsigned nCiclos;    // Contador para o número de ciclos encontrados
 vector<vector<int>> ciclos(2);  // Vector bidimensional para armazenar os ciclos
 
 
@@ -81,9 +81,9 @@ void dfs(int start1, int n){
 bool verifica_arestas(){
     int cont = 0;
     for(int u = 0; u < nCiclos; u++){
-        for(int v = 0; v < ciclos[u].size(); v++){
+        for(unsigned v = 0; v < ciclos[u].size(); v++){
             for(int x = u+1; x < nCiclos; x++){
-                for(int z = 0; z < ciclos[x].size(); z++){
+                for(unsigned z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) cont++;
                 }
             }
@@ -98,9 +98,9 @@ bool verifica_arestas(){
 bool existe_1_vcomum(){
     int cont = 0;
     for(int u = 0; u < nCiclos; u++){
-        for(int v = 0; v < ciclos[u].size(); v++){
+        for(unsigned v = 0; v < ciclos[u].size(); v++){
             for(int x = u+1; x < nCiclos; x++){
-                for(int z = 0; z < ciclos[x].size(); z++){
+                for(unsigned z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) cont++;
                 }
             }
@@ -117,9 +117,9 @@ bool existe_1_vcomum(){
 bool n_vcomum(){
     int cont = 0;
     for(int u = 0; u < nCiclos; u++){
-        for(int v = 0; v < ciclos[u].size(); v++){
+        for(unsigned v = 0; v < ciclos[u].size(); v++){
             for(int x = u+1; x < nCiclos; x++){
-                for(int z = 0; z < ciclos[x].size(); z++){
+                for(unsigned z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) cont++;
                 }
             }
@@ -136,9 +136,9 @@ bool n_vcomum(){
 bool v_ap_1vez(){
     int elem;
      for(int u = 0; u < nCiclos; u++){
-        for(int v = 0; v < ciclos[u].size(); v++){
+        for(unsigned v = 0; v < ciclos[u].size(); v++){
             elem = ciclos[u][v];
-            for(int x = 0; x < ciclos[u].size(); x++){
+            for(unsigned x = 0; x < ciclos[u].size(); x++){
                 if(x != v){
                     if(ciclos[u][x] == elem) return false;
                 }
@@ -203,14 +203,14 @@ int main(){
 
         // verifica se x pertence a c1 e se y pertence a ck
         for(int u = 0; u < nCiclos; u++){
-            for(int v = 0; v < ciclos[u].size(); v++){
+            for(unsigned v = 0; v < ciclos[u].size(); v++){
                 if (x == ciclos[u][v]){
                     tem_x = true;
                     for(int x = u; x < nCiclos; x++){
                         // verifica o match
                         if(ciclos[u][0] == ciclos[x][0]);
                         else cont++;
-                        for(int z = 0; z < ciclos[x].size(); z++){
+                        for(unsigned z = 0; z < ciclos[x].size(); z++){
                             if (y == ciclos[x][z]){
                                 tem_y = true;
                                 z = ciclos[x].size();

@@ -1,3 +1,8 @@
+/*
+Dênis de Souza Cordeiro - 202110235 - 14A
+Gabriel Fernando Zanda Gonçalves - 202110234 - 14A
+Ronald Souza Galdino - 202110679 - 14A
+*/
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -10,7 +15,7 @@ using namespace std;
 int** MA;   // Matriz de Adjacência
 int* pai;   // Array de pais de cada vértice
 int* cor;   // Array de cores de cada vértice
-int nCiclos = 0;    // Contador para o número de ciclos encontrados
+int nCiclos;    // Contador para o número de ciclos encontrados
 vector<vector<int>> ciclos(2);  // Vector bidimensional para armazenar os ciclos
 //vector<bool> ciclos_adj;
 //vector<int> ondeTemosX;
@@ -162,11 +167,11 @@ bool v_ap_1vez(){
 }
 
 void imprime_n(){
-    cout << "0" << endl;
+    cout << "##########       0" << endl;
 }
 
 void imprime_s(){
-    cout << "1" << endl;
+    cout << "############      1" << endl;
 }
 
 
@@ -179,6 +184,7 @@ int main(){
         pai = new int[n];
         cor = new int[n];
         MA = new int*[n];   // Matriz de adj = Vetor de Vetores
+        nCiclos = 0;
         
 
         // Aloca os outros vetores e ajusa o estado inicial da matriz
@@ -288,8 +294,11 @@ int main(){
             delete MA[u];
         }
         delete[] MA;
-        ciclos.clear();
-
+         for(int u = 0; u < nCiclos; u++){
+            //for(int v = 0; v < ciclos[u].size(); v++){
+                 ciclos[u].clear();
+            //}
+         }
         cin >> n >> m;
     }
 

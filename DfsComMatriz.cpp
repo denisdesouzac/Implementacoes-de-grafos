@@ -15,12 +15,20 @@ int nCiclos = 0;    // Contador para o número de ciclos encontrados
 vector<vector<int>> ciclos(2); // Vector bidimensional para armazenar os ciclos
 vector<int> ondeTemosX;
 vector<int> ondeTemosY;
+vector<vector<int>> ondeTemos;
 
 
 // Função para verificar quando há necessidade de redimensionar o Vector de Ciclos (adiciona 2 espaços por vez)
 void checkResize(){ 
     if(nCiclos == ciclos.size()){
         ciclos.resize(ciclos.size()+2);
+    }
+}
+
+// Função para verificar quando há necessidade de redimensionar o Vector de Ciclos (adiciona 2 espaços por vez)
+void checkResize2(int tam){ 
+    if(tam == ondeTemos.size()){
+        ondeTemos.resize(ondeTemos.size()+1);
     }
 }
 
@@ -86,16 +94,24 @@ void pesquisarV(int v, vector<int> &ondeTemosV){
     }
 }
 
+int ehigual(int a,int b, vector<int>ondetemosV){
+
+}
+
 int buscarSubGrafo(int x, int y){
     vector<int> ondeTemosV;
     pesquisarV(x, ondeTemosV);
+                for( int b : ondeTemosV){
+                    cout << "Onde temos " << x << " :" << b << endl;
+                }
     for( int a : ondeTemosV){
         for(int i : ciclos[a]){
-            cor[i-1] = AZUL;
             if( i == y ){
                 return 1;
             }
             else if( i != x and cor[i-1] != AZUL){
+                cor[i-1] = AZUL;
+                cout << "Vou buscar em: " << i << endl;
                 buscarSubGrafo(i, y);
             }
         }
@@ -117,7 +133,23 @@ int buscarSubGrafo(int x, int y){
     return 0;
 }
 
-int verificarXY(int x, int y){
+void montarOndeTemos(int n){
+    vector<int> aux;
+    int aux2 = 1;
+    int tam = 0;
+    for(int i = 0; i < n; i++){
+        for (int u : ciclos[i]){
+            if( aux2 == u ){
+                aux.push_back(i);
+            }
+        }
+    }
+    ondeTemos.push_back(aux);
+    tam++;
+    checkResize2(tam);
+}
+
+int verificarXY(int x, int y, int n){
 
     for(int i = 0; i < nCiclos; i++){
         for (int u : ciclos[i]){
@@ -151,6 +183,18 @@ int verificarXY(int x, int y){
         }
         cout << endl;
     }
+
+    montarOndeTemos(n);
+
+    cout << "Printar ondeTemos: " << endl;
+    for(int i = 0; i < n; i++){
+        cout << "Vou printar para " << i  << endl;
+        for (int u : ondeTemos[i]){
+            cout << u << " & ";
+        }
+        cout << endl;
+    }
+
 
     cout << buscarSubGrafo(x,y) << " ESSA É A SAÍDA" << endl;
 
@@ -227,7 +271,7 @@ int main(){
     cin >> x >> y;
 
     // Função de verificação de X e Y (averiguar se eles estão em um ciclo cada, ou dentro do mesmo)
-    verificarXY(x,y);
+    verificarXY(x,y, n);
 
     // Desalocação de memória
     delete[] pai;

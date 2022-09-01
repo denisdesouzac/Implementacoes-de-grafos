@@ -12,6 +12,7 @@ int* pai;   // Array de pais de cada vértice
 int* cor;   // Array de cores de cada vértice
 int nCiclos = 0;    // Contador para o número de ciclos encontrados
 vector<vector<int>> ciclos(2);  // Vector bidimensional para armazenar os ciclos
+//vector<bool> ciclos_adj;
 //vector<int> ondeTemosX;
 //vector<int> ondeTemosY;
 
@@ -51,7 +52,7 @@ void registarCicloParalelo(int start1, int start2){
  Ao encontrar com um vértice CINZA (já mapeado) temos um ciclo próprio e a função de registro é chamada.
 */
 void dfs(int start1, int n){
-    cout << " * " << start1;
+   // cout << " * " << start1;
     cor[start1-1] = CINZA;  // Marcando o vértice atual como CINZA
 
 	for (int start2 = 1; start2 <= n; start2++) {
@@ -83,7 +84,7 @@ bool verifica_arestas(){
             for(int x = u+1; x < nCiclos; x++){
                 for(int z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) {
-                        cout << "achei vértice comum(arestas): " << ciclos[u][v] << " E " << ciclos[x][z] << endl;
+                      //  cout << "achei vértice comum(arestas): " << ciclos[u][v] << " E " << ciclos[x][z] << endl;
                         cont++;
                     }
                 }
@@ -91,7 +92,7 @@ bool verifica_arestas(){
         }
     }
     if(cont>1){
-        cout << "Contador arestas: " << cont/float(2) << endl;
+       // cout << "Contador arestas: " << cont/float(2) << endl;
         return true;
     }else{
         return false;
@@ -106,7 +107,7 @@ bool existe_1_vcomum(){
             for(int x = u+1; x < nCiclos; x++){
                 for(int z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) {
-                        cout << "achei vértice comum: " << ciclos[u][v] << " E " << ciclos[x][z] << endl;
+                       // cout << "achei vértice comum: " << ciclos[u][v] << " E " << ciclos[x][z] << endl;
                         cont++;
                     }
                 }
@@ -116,7 +117,7 @@ bool existe_1_vcomum(){
     if(cont == 1){
         return true;
     }else{
-        cout << "Contador vertices comum em dois ciclos adj: " << cont << endl;
+        //cout << "Contador vertices comum em dois ciclos adj: " << cont << endl;
         return false;
     }
 }
@@ -129,7 +130,7 @@ bool n_vcomum(){
             for(int x = u+1; x < nCiclos; x++){
                 for(int z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) {
-                        cout << "achei vértice comum(não adjacente): " << ciclos[u][v] << " E " << ciclos[x][z] << endl;
+                       // cout << "achei vértice comum(não adjacente): " << ciclos[u][v] << " E " << ciclos[x][z] << endl;
                         cont++;
                     }
                 }
@@ -137,10 +138,10 @@ bool n_vcomum(){
         }
     }
     if(cont == 0){
-        return false;
-    }else{
-        cout << "ciclos não adjacentes possuem vértice comum:  " << cont << endl;
         return true;
+    }else{
+       // cout << "ciclos não adjacentes possuem vértice comum:  " << cont << endl;
+        return false;
     }
 }
 
@@ -174,105 +175,123 @@ int main(){
     // Iniciação e Declaração das estruturas
     int n, m, x, y;
     cin >> n >> m;
-    pai = new int[n];
-    cor = new int[n];
-    MA = new int*[n];   // Matriz de adj = Vetor de Vetores
-    
-
-    // Aloca os outros vetores e ajusa o estado inicial da matriz
-    for(int i = 0; i < n; i++){
-        MA[i] = new int[n];
-        // Preenche a matriz com Zeros
-        for(int j = 0; j < n; j++){
-            MA[i][j] = 0;
-        }
-        pai[i] = -1;
-        cor[i] = BRANCO;
-    }
-
-    // leitura do grafo
-    int u, v;
-    for(int i = 1; i <= m; i++){
-        cin >> u >> v; // lendo as arestas do grafo
+    while(n != 0 and m != 0){
+        pai = new int[n];
+        cor = new int[n];
+        MA = new int*[n];   // Matriz de adj = Vetor de Vetores
         
-        // MA (insere a quantiade necessária de arestas)
-        MA[u-1][v-1]++;
-        MA[v-1][u-1]++;
-    }
 
-    //Print DFS
-    cout << endl;
-    dfs(1,n);
-    cout << endl;
-    cout << "nCIclos: " << nCiclos << endl;
-
-    //Print Ciclos
-    for(int u = 0; u < nCiclos; u++){
-        for(int v = 0; v < ciclos[u].size(); v++){
-            cout << " " << ciclos[u][v]  << " ";
+        // Aloca os outros vetores e ajusa o estado inicial da matriz
+        for(int i = 0; i < n; i++){
+            MA[i] = new int[n];
+            // Preenche a matriz com Zeros
+            for(int j = 0; j < n; j++){
+                MA[i][j] = 0;
+            }
+            pai[i] = -1;
+            cor[i] = BRANCO;
         }
+
+        // leitura do grafo
+        int u, v;
+        for(int i = 1; i <= m; i++){
+            cin >> u >> v; // lendo as arestas do grafo
+            
+            // MA (insere a quantiade necessária de arestas)
+            MA[u-1][v-1]++;
+            MA[v-1][u-1]++;
+        }
+
+        //Print DFS
         cout << endl;
-    }
-    
-    // Entrada de X e Y
-    cin >> x >> y;
+        dfs(1,n);
+        cout << endl;
+        cout << "nCIclos: " << nCiclos << endl;
 
-    bool tem_x = false;
-    bool tem_y = false;
+        //Print Ciclos
+        for(int u = 0; u < nCiclos; u++){
+            for(int v = 0; v < ciclos[u].size(); v++){
+                cout << " " << ciclos[u][v]  << " ";
+            }
+            cout << endl;
+        }
+        
+        // Entrada de X e Y
+        cin >> x >> y;
 
-    // verifica se x pertence a c1 e se y pertence a ck
-    for(int u = 0; u < nCiclos; u++){
-        for(int v = 0; v < ciclos[u].size(); v++){
-             if (x == ciclos[u][v]){
-                tem_x = true;
-                for(int x = u; x < nCiclos; x++){
-                    for(int z = 0; z < ciclos[x].size(); z++){
-                        if (y == ciclos[x][z]){
-                            tem_y = true;
-                            z = ciclos[x].size();
-                            x = nCiclos;
-                            v = ciclos[u].size();
-                            u = nCiclos;
+        bool tem_x = false;
+        bool tem_y = false;
+        int cont = 0;
+
+        // verifica se x pertence a c1 e se y pertence a ck
+        for(int u = 0; u < nCiclos; u++){
+            for(int v = 0; v < ciclos[u].size(); v++){
+                if (x == ciclos[u][v]){
+                    tem_x = true;
+                    for(int x = u; x < nCiclos; x++){
+                        // verifica o match
+                        if(ciclos[u][0] == ciclos[x][0]);
+                        else {
+                          //  cout << "cai no match: " << ciclos[u][0] << " != " << ciclos[x][0] << endl;
+                            cont++;
+                        }
+                        for(int z = 0; z < ciclos[x].size(); z++){
+                            if (y == ciclos[x][z]){
+                                tem_y = true;
+                                z = ciclos[x].size();
+                                x = nCiclos;
+                                v = ciclos[u].size();
+                                u = nCiclos;
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    cout << "tem x: "<< tem_x << " " << "Tem y: " << tem_y << endl;
+       // cout << "tem x: "<< tem_x << " " << "Tem y: " << tem_y << endl;
 
-    if((!tem_x) or (!tem_y)){
-       imprime_n();
-     }else{
-        if(verifica_arestas()) {
-            cout << "Caiu aq: verifica_arestas()" << endl;
-            imprime_s();
-        }
-        else if(existe_1_vcomum()){
-             cout << "Caiu aq: existe_1_vcomum()" << endl;
-            imprime_s();
-        } 
-        else if(n_vcomum()) {
-             cout << "Caiu aq: n_vcomum()" << endl;
-            imprime_s();
-        }
-        else if(v_ap_1vez()){
-            cout << "Caiu aq: v_ap_1vez()" << endl;
-            imprime_s();
-        }
-        else{
+
+        if((!tem_x) or (!tem_y)){
+            imprime_n();
+        }else if(cont > 0){
             imprime_n();
         }
-    }
+        else{
+            if(nCiclos > 1){
+                if(!verifica_arestas()) {
+                   // cout << "Caiu aq: verifica_arestas()" << endl;
+                    imprime_s();
+                }
+                else if(existe_1_vcomum()){
+                   // cout << "Caiu aq: existe_1_vcomum()" << endl;
+                    imprime_s();
+                } 
+                else if(n_vcomum()) {
+                   // cout << "Caiu aq: n_vcomum()" << endl;
+                    imprime_s();
+                }
+            }
+            else if(v_ap_1vez()){
+                //cout << "Caiu aq: v_ap_1vez()" << endl;
+                imprime_s();
+            }
+            else{
+                imprime_n();
+            }
+        }
 
-    // Desalocação de memória
-    delete[] pai;
-    delete[] cor;
-    for(int u = 0; u < n; u++){
-        delete MA[u];
+        // Desalocação de memória
+        delete[] pai;
+        delete[] cor;
+        for(int u = 0; u < n; u++){
+            delete MA[u];
+        }
+        delete[] MA;
+        ciclos.clear();
+
+        cin >> n >> m;
     }
-    delete[] MA;
 
     return 0;
 }

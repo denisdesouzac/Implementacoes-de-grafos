@@ -39,7 +39,7 @@ void registarCiclo(int comecar, int parar){
 
 // Função que faz o registro do ciclo formado por arestas paralelas
 void registarCicloParalelo(int start1, int start2){
-    for( int i =0; i < (MA[start1-1][start2-1]/2); i++ ){
+    for( unsigned i =0; i < (MA[start1-1][start2-1]/2); i++ ){
         ciclos[nCiclos].push_back(start1);
         ciclos[nCiclos].push_back(start2);
         nCiclos++;
@@ -56,7 +56,7 @@ void registarCicloParalelo(int start1, int start2){
 void dfs(int start1, int n){
     cor[start1-1] = CINZA;  // Marcando o vértice atual como CINZA
 
-	for (int start2 = 1; start2 <= n; start2++) {
+	for (unsigned start2 = 1; start2 <= n; start2++) {
 		// Caso para visitar o vizinho BRANCO
 		if ( MA[start1-1][start2-1] >= 1 and (cor[start2-1] == BRANCO)){ 
             // Verificar se temos ciclos formados por arestas paralelas (caso haja, o ciclo é montado diretamente aqui)
@@ -80,9 +80,9 @@ void dfs(int start1, int n){
 // verifica se dois ciclos quaisquer Ci e Cj, i,j=1,...,k, i != j, não possuem arestas em comum.
 bool verifica_arestas(){
     int cont = 0;
-    for(int u = 0; u < nCiclos; u++){
+    for(unsigned u = 0; u < nCiclos; u++){
         for(unsigned v = 0; v < ciclos[u].size(); v++){
-            for(int x = u+1; x < nCiclos; x++){
+            for(unsigned x = u+1; x < nCiclos; x++){
                 for(unsigned z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) cont++;
                 }
@@ -97,9 +97,9 @@ bool verifica_arestas(){
 //verifica se existe exatamente um vértice em comum entre dois ciclos adjacentes Ci e Cj, com 1 <= i,j <= k.
 bool existe_1_vcomum(){
     int cont = 0;
-    for(int u = 0; u < nCiclos; u++){
+    for(unsigned u = 0; u < nCiclos; u++){
         for(unsigned v = 0; v < ciclos[u].size(); v++){
-            for(int x = u+1; x < nCiclos; x++){
+            for(unsigned x = u+1; x < nCiclos; x++){
                 for(unsigned z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) cont++;
                 }
@@ -116,9 +116,9 @@ bool existe_1_vcomum(){
 // verifica se ciclos que não-adjacentes não possuem vértices em comum.
 bool n_vcomum(){
     int cont = 0;
-    for(int u = 0; u < nCiclos; u++){
+    for(unsigned u = 0; u < nCiclos; u++){
         for(unsigned v = 0; v < ciclos[u].size(); v++){
-            for(int x = u+1; x < nCiclos; x++){
+            for(unsigned x = u+1; x < nCiclos; x++){
                 for(unsigned z = 0; z < ciclos[x].size(); z++){
                     if(ciclos[u][v] == ciclos[x][z]) cont++;
                 }
@@ -135,7 +135,7 @@ bool n_vcomum(){
 // verifica se um vértice aparece em um ciclo no máximo uma vez.
 bool v_ap_1vez(){
     int elem;
-     for(int u = 0; u < nCiclos; u++){
+     for(unsigned u = 0; u < nCiclos; u++){
         for(unsigned v = 0; v < ciclos[u].size(); v++){
             elem = ciclos[u][v];
             for(unsigned x = 0; x < ciclos[u].size(); x++){
@@ -170,10 +170,10 @@ int main(){
         
 
         // Aloca os outros vetores e ajusa o estado inicial da matriz
-        for(int i = 0; i < n; i++){
+        for(unsigned i = 0; i < n; i++){
             MA[i] = new int[n];
             // Preenche a matriz com Zeros
-            for(int j = 0; j < n; j++){
+            for(unsigned j = 0; j < n; j++){
                 MA[i][j] = 0;
             }
             pai[i] = -1;
@@ -202,11 +202,11 @@ int main(){
         int cont = 0;
 
         // verifica se x pertence a c1 e se y pertence a ck
-        for(int u = 0; u < nCiclos; u++){
+        for(unsigned u = 0; u < nCiclos; u++){
             for(unsigned v = 0; v < ciclos[u].size(); v++){
                 if (x == ciclos[u][v]){
                     tem_x = true;
-                    for(int x = u; x < nCiclos; x++){
+                    for(unsigned x = u; x < nCiclos; x++){
                         // verifica o match
                         if(ciclos[u][0] == ciclos[x][0]);
                         else cont++;
@@ -256,7 +256,7 @@ int main(){
             delete MA[u];
         }
         delete[] MA;
-         for(int u = 0; u < nCiclos; u++){
+         for(unsigned u = 0; u < nCiclos; u++){
             ciclos[u].clear();
          }
         cin >> n >> m;

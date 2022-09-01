@@ -39,7 +39,7 @@ void registarCiclo(int comecar, int parar){
 
 // Função que faz o registro do ciclo formado por arestas paralelas
 void registarCicloParalelo(int start1, int start2){
-    for( unsigned i =0; i < (MA[start1-1][start2-1]/2); i++ ){
+    for( int i =0; i < (MA[start1-1][start2-1]/2); i++ ){
         ciclos[nCiclos].push_back(start1);
         ciclos[nCiclos].push_back(start2);
         nCiclos++;
@@ -56,7 +56,7 @@ void registarCicloParalelo(int start1, int start2){
 void dfs(int start1, int n){
     cor[start1-1] = CINZA;  // Marcando o vértice atual como CINZA
 
-	for (unsigned start2 = 1; start2 <= n; start2++) {
+	for (int start2 = 1; start2 <= n; start2++) {
 		// Caso para visitar o vizinho BRANCO
 		if ( MA[start1-1][start2-1] >= 1 and (cor[start2-1] == BRANCO)){ 
             // Verificar se temos ciclos formados por arestas paralelas (caso haja, o ciclo é montado diretamente aqui)
@@ -170,10 +170,10 @@ int main(){
         
 
         // Aloca os outros vetores e ajusa o estado inicial da matriz
-        for(unsigned i = 0; i < n; i++){
+        for(int i = 0; i < n; i++){
             MA[i] = new int[n];
             // Preenche a matriz com Zeros
-            for(unsigned j = 0; j < n; j++){
+            for(int j = 0; j < n; j++){
                 MA[i][j] = 0;
             }
             pai[i] = -1;

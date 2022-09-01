@@ -245,7 +245,7 @@ int main(){
     if((!tem_x) or (!tem_y)){
        imprime_n();
      }else{
-        if(verifica_arestas()) {
+        if(!verifica_arestas()) {
             cout << "Caiu aq: verifica_arestas()" << endl;
             imprime_s();
         }

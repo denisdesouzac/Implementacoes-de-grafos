@@ -124,7 +124,13 @@ bool n_vcomum(){
                 }
             }
         }
-    }
+    }                         
+
+    { }
+    { }
+    { }
+
+
     if(cont == 0){
         return true;
     }else{

@@ -140,10 +140,10 @@ int main(){
         // Segunda DFS 
         dfs(x, n, y, result2);
         if(result2 == 1){
-            cout << "#" << 1 << "#" << endl;
+            cout << 1 << endl;
         }
         else{
-            cout << "#" << 0 << "#" << endl;
+            cout << 0 << endl;
         }
 
         // Desalocando memória        

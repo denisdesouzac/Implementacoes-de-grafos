@@ -4,6 +4,22 @@ Gabriel Fernando Zanda Gonçalves - 202110234 - 14A
 Ronald Souza Galdino - 202110679 - 14A
 */
 
+/*
+Ideia do algoritmo:
+Nosso algoritmo consiste na realização de 2 BUSCAS EM PROFUNDIDADE consecutivas na intenção de encontrar o SUBGRAFO EW entre X e
+Y apresentado na descrição do problema. Quando a PRIMEIRA busca é realizada, o caminho que foi percorrido no grafo é REMOVIDO
+da MATRIZ DE ADJACÊNCIA (através do decremento dos índices) e uma SEGUNDA busca em profundidade é chamada, esta por sua vez
+não REMOVE do grafo o caminho que foi percorrido (pois não é necessário, afinal só percorreremos a matriz 2 vezes e a descartamos)
+ela apenas verifica se, mesmo com a remoção do caminho anterior, ainda temos como chegar de X à Y.
+
+Essa implementação funciona pois a ideia é que como temos 2 formas diferentes de percorrer e encontrar um caminho de X até Y
+significa que: temos CICLOS conectados por vértices comuns e/ou Temos CICLOS de arestas paralelas formando o CAMINHO entre X e Y.
+Caso não seja possível fazer os 2 percorrimentos pelo GRAFO, significa que: Não temos CICLOS conectados por vértices comuns e/ou
+CICLOS de arestas paralelas formando um caminho entre X e Y, JUSTAMENTE PORQUE se conseguimos ir de X a Y UMA vez e APAGAMOS
+esse caminho gerado, MAS AINDA ASSIM conseguimos ir de X a Y NOVAMENTE, temos o SUBGRAFO EW descrito (com ligação de X a Y através
+de ciclos conectados por vértices comuns).  
+*/
+
 # include <iostream>
 #include <vector>
 using namespace std;
@@ -131,19 +147,25 @@ int main(){
         //Primeira DFS (a que "remove" o caminho depois de percorrer a MA)
         dfs(x, n, y, result, pai[x-1]);
 
-        // Reajuste necessário para um novo percorrimento de DFS
-        for(int i = 0; i < n; i++){
-            pai[i] = -1;
-            cor[i] = BRANCO;
-        }
+        // condicional para ignorar a segunda busca caso a primeira já tenha falhado (economiza tempo)
+        if(result == true){
+            // Reajuste necessário para um novo percorrimento de DFS
+            for(int i = 0; i < n; i++){
+                pai[i] = -1;
+                cor[i] = BRANCO;
+            }
 
-        // Segunda DFS 
-        dfs(x, n, y, result2);
-        if(result2 == 1){
-            cout << 1 << endl;
+            // Segunda DFS 
+            dfs(x, n, y, result2);
+            if(result2 == 1){
+                cout << 1 << endl;
+            }
+            else{
+                cout << 0 <<  endl;
+            }
         }
         else{
-            cout << 0 << endl;
+            cout << 0 << endl; 
         }
 
         // Desalocando memória        

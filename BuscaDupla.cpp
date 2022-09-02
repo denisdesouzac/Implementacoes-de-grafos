@@ -56,11 +56,7 @@ int dfs(int x, int n, int y, bool &result){
 }
 
 //Função para remover o caminho da MA
-void removerCaminho(){
-    for( int i : caminho){
-
-    }
-}
+void removerCaminho();
 
 // Sobrecarga
 int dfs(int x, int n, int y, int &result){

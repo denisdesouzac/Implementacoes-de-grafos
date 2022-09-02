@@ -128,10 +128,10 @@ int main(){
         }
         dfs(x,n,y, result2);
         if(result2 == 1){
-            cout << 1;
+            cout << 1 << endl;
         }
         else{
-            cout << 0;
+            cout << 0 << endl;
         }
         
         delete[] pai;

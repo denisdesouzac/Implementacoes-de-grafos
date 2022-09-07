@@ -1,20 +1,25 @@
 #include<iostream>
-#include<climits>
+#include<utility>
 using namespace std;
+
+#define INF 1000000000 // Usando a sua definição de "infinito"
+
+int** MA;   // Matriz de Adjacência
 
 int miniDist(int distance[], bool Tset[]) // finding minimum distance
 {
-    int minimum=INT_MAX,ind;
+    int minimum=INF; // Mudei aqui
+    int dist;
               
     for(int k=0;k<6;k++) 
     {
         if(Tset[k]==false && distance[k]<=minimum)      
         {
             minimum=distance[k];
-            ind=k;
+            dist=k;
         }
     }
-    return ind;
+    return dist;
 }
 
 void DijkstraAlgo(int graph[6][6],int src) // adjacency matrix 
@@ -22,10 +27,10 @@ void DijkstraAlgo(int graph[6][6],int src) // adjacency matrix
     int distance[6]; // // array to calculate the minimum distance for each node                             
     bool Tset[6];// boolean array to mark visited and unvisited for each node
     
-     
+    // Inicialmente todos os vértices NÃO foram visitados e tem DISTÂNCIA = INFINITO 
     for(int k = 0; k<6; k++)
     {
-        distance[k] = INT_MAX;
+        distance[k] = INF; //Mudei aqui
         Tset[k] = false;    
     }
     
@@ -38,7 +43,7 @@ void DijkstraAlgo(int graph[6][6],int src) // adjacency matrix
         for(int k = 0; k<6; k++)                  
         {
             // updating the distance of neighbouring vertex
-            if(!Tset[k] && graph[m][k] && distance[m]!=INT_MAX && distance[m]+graph[m][k]<distance[k])
+            if(!Tset[k] && graph[m][k] && distance[m]!=INF && distance[m]+graph[m][k]<distance[k])
                 distance[k]=distance[m]+graph[m][k];
         }
     }

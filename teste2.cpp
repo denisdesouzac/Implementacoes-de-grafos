@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<utility>
 using namespace std;
 
 #define INF 10000000
@@ -84,6 +85,7 @@ int dijkstra(int n, int s, int t){
         //cout << t << s << endl;
         caminhos.push_back(t);
         registrarCaminho(t,s, pai);
+        //excluirCaminho();
     }
     return dist[t];
 }

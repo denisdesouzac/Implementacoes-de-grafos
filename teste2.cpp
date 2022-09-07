@@ -3,7 +3,23 @@
 #include<queue>
 using namespace std;
 
+#define INF 10000000
+#define NIL -1
+
 vector<pair<int, int> > * adj;
+vector<int> caminhos;
+
+//Função para registrar o caminho percorrido
+void registrarCaminho(int start, int end, int pai[]){
+    //cout << "start : " << start << "end : "<< end << endl;
+    if(pai[start] != end){
+        caminhos.push_back(pai[start]);
+        registrarCaminho(pai[start], end, pai);
+    }
+    else{
+        caminhos.push_back(end);
+    }
+}
 
 int dijkstra(int n, int s, int t){
     // vetor de distâncias
@@ -13,17 +29,24 @@ int dijkstra(int n, int s, int t){
     // expandido (visitado), não expandir mais
     bool visitados[n];
 
+    // vetor de pais
+    int pai[n];
+
     // fila de prioridades de pair (distancia, vértice)
     priority_queue < pair<int, int>,vector<pair<int, int> >, greater<pair<int, int> > > heap;
 
-    // inicia o vetor de distâncias e visitados
+    // inicia o vetor de distâncias, visitados e de pais
     for(int i = 0; i < n; i++){
-        dist[i] = 10000000;
+        dist[i] = INF;
         visitados[i] = false;
+        pai[i] = NIL;
     }
 
-    // distância da origem para origem é 0
+    // distância da origem para origem é 0 
     dist[s] = 0;
+
+    //Origem é seu próprio Pai
+    pai[s] = 0;
 
     // insere na fila
     heap.push(make_pair(dist[s], s));
@@ -35,7 +58,7 @@ int dijkstra(int n, int s, int t){
         int u = p.second; // obtém o vértice do pair
         heap.pop(); // remove da fila
 
-        // verifica se o vértice não foi expandido
+        // verifica se o vértice não foi VISITADO
         if(visitados[u] == false){
 
             // marca como visitado
@@ -47,13 +70,20 @@ int dijkstra(int n, int s, int t){
                 int p = it->second; // custo da aresta
 
                 // relaxamento (u, v)
-                if(dist[v] > (dist[u] + p)){                    
+                if(dist[v] > (dist[u] + p) and visitados[v] == false){    //Adicioneu o "and" na condição.             
                     // atualiza a distância de "v" e insere na fila
                     dist[v] = dist[u] + p;
                     heap.push(make_pair(dist[v], v));
+                    pai[v] = u;
+                    //cout << "pai de " << v << " : " << pai[v] << endl;
                 }
             }
         }
+    }
+    if(dist[t] != INF){
+        //cout << t << s << endl;
+        caminhos.push_back(t);
+        registrarCaminho(t,s, pai);
     }
     return dist[t];
 }
@@ -61,7 +91,7 @@ int dijkstra(int n, int s, int t){
 int main(){
     int n, m; // num de vértices e arestas
     int s, t; // origem e destino
-    int u, v, p; //  pontos u e v com distância p
+    int u, v, p; //  pontos u e v da aresta com distância p
 
     cin >> n >> m;
     cin >> s >> t;
@@ -74,7 +104,14 @@ int main(){
         adj[u].push_back(make_pair(v, p));
     }
 
-    cout << dijkstra(n,s,t) << endl;
+    cout << "Menor Caminho (R) : " << dijkstra(n,s,t) << endl;
+
+    cout << "Tamanho do Caminho : " << caminhos.size() << endl;
+
+    cout << "Caminho: ";
+    for(int x : caminhos){
+        cout << x << ' ';
+    }
 
     return 0;
 }

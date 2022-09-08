@@ -134,7 +134,7 @@ int main(){
         int caminho2 = menor_caminho;
         
         if(caminho2 == INF){
-            cout << -1;
+            cout << -1 << endl;
         }
         else{
             while(caminho2 == menor_caminho){

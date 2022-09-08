@@ -31,15 +31,15 @@ void registrarCaminho(int start, int end){
 
 // Função para realizar a remoção das arestas de acordo como fornecido
 void removerArestas(int start, int end){
-    while(pai[end] != NIL){//enquanto o pai da origem não for encontrado
+    while(pai[start] != NIL){//enquanto o pai da origem não for encontrado
 
-        for(unsigned i = 0; i < adj[pai[end]].size(); i++){ // percorre as arestas que ligam cada vértice
+        for(int i = 0; i < int(adj[pai[start]].size()); i++){ // percorre as arestas que ligam cada vértice
 
-            pair<int, int> aresta = adj[pai[end]][i];
+            pair<int, int> aresta = adj[pai[start]][i];
 
-            if(end == aresta.first){// se for igual
-                adj[pai[end]].erase(adj[pai[end]].begin()+i); // removo a aresta da lista de adj
-                end = pai[end];
+            if(start == aresta.first){// se for igual
+                adj[pai[start]].erase(adj[pai[start]].begin()+i); // removo a aresta da lista de adj
+                start = pai[start];
                 break;
             }
         }
@@ -130,22 +130,22 @@ int main(){
         }
         int menor_caminho  = dijkstra(n,s,t);
 
-        cout << "Menor Caminho (R) : " << menor_caminho << endl;
-
-
         // inversão do caminho
         reverse(caminhos.begin(), caminhos.end());
 
-
+        //int aux1, aux2;
         int caminho2 = menor_caminho;
-        for(int i = 0; i < caminhos.size(); i++){
-            if(caminho2 == menor_caminho and i < caminhos.size()-1){
-                removerArestas(caminhos[i],caminhos[i+1]);
-                caminho2 = dijkstra(n,s,t);
-            }
-        }
+        //vector<int> menoresCaminhos;
 
-        cout << "Segundo menor caminho: ";
+        while(caminho2 == menor_caminho){
+            for(int i = 0; i < int(caminhos.size()); i++){
+                removerArestas(caminhos[i],caminhos[caminhos.size()]);
+                break;
+            }
+            caminhos.clear();
+            caminho2 = dijkstra(n,s,t);
+        }
+       
         if(caminho2 != INF){ // verifica se foi achado um segundo caminho
             cout << caminho2 << endl;
         } else{

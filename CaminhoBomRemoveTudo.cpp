@@ -16,12 +16,13 @@ using namespace std;
 
 vector<pair<int, int>>* adj;
 vector<int> caminhos;
+int pai[0];
 
 //Função para registrar o caminho percorrido
-void registrarCaminho(int start, int end, int pai[]){
+void registrarCaminho(int start, int end){
     if(pai[start] != end){
         caminhos.push_back(pai[start]);
-        registrarCaminho(pai[start], end, pai);
+        registrarCaminho(pai[start], end);
     }
     else{
         caminhos.push_back(end);
@@ -29,29 +30,32 @@ void registrarCaminho(int start, int end, int pai[]){
 }
 
 // Função para realizar a remoção das arestas de acordo como fornecido
-void removerArestas(int start, int end, int pai[]){
-    while(pai[start] != NIL){//enquanto o pai da origem não for encontrado
+void removerArestas(int start, int end){
+    while(pai[end] != NIL){//enquanto o pai da origem não for encontrado
 
-        for(int i = 0; i < int(adj[pai[start]].size()); i++){ // percorre as arestas que ligam cada vértice
+        for(unsigned i = 0; i < adj[pai[end]].size(); i++){ // percorre as arestas que ligam cada vértice
 
-            pair<int, int> aresta = adj[pai[start]][i];
+            pair<int, int> aresta = adj[pai[end]][i];
 
-            if(start == aresta.first){// se for igual
-                adj[pai[start]].erase(adj[pai[start]].begin()+i); // removo a aresta da lista de adj
-                start = pai[start];
+            if(end == aresta.first){// se for igual
+                adj[pai[end]].erase(adj[pai[end]].begin()+i); // removo a aresta da lista de adj
+                end = pai[end];
                 break;
             }
         }
     }
 }
 
-int dijkstra(int n, int s, int t, int pai[]){
+int dijkstra(int n, int s, int t){
     // vetor de distâncias
     int dist[n];
 
     //vetor de visitados serve para caso o vértice já tenha sido
     // expandido (visitado), não expandir mais
     bool visitados[n];
+
+    // vetor de pais
+    pai[n];
 
     // fila de prioridades de pair (distancia, vértice)
     priority_queue < pair<int, int>,vector<pair<int, int> >, greater<pair<int, int> > > heap;
@@ -103,7 +107,7 @@ int dijkstra(int n, int s, int t, int pai[]){
     }
     if(dist[t] != INF){
         caminhos.push_back(t);
-        registrarCaminho(t,s, pai);
+        registrarCaminho(t,s);
     }
     return dist[t];
 }
@@ -118,31 +122,30 @@ int main(){
         cin >> s >> t;
 
         adj = new vector<pair<int, int> >[n];
-        int pai[n];
 
         // leitura do grafo
         for(int i = 0; i < m; i++){
             cin >> u >> v >> p;
             adj[u].push_back(make_pair(v, p));
         }
-        int menor_caminho  = dijkstra(n,s,t,pai);
+        int menor_caminho  = dijkstra(n,s,t);
+
+        cout << "Menor Caminho (R) : " << menor_caminho << endl;
+
 
         // inversão do caminho
         reverse(caminhos.begin(), caminhos.end());
 
-        //int aux1, aux2;
-        int caminho2 = menor_caminho;
-        //vector<int> menoresCaminhos;
 
-        while(caminho2 == menor_caminho){
-            for(int i = 0; i < int(caminhos.size()); i++){
-                removerArestas(caminhos[i],caminhos[caminhos.size()], pai);
-                break;
+        int caminho2 = menor_caminho;
+        for(int i = 0; i < caminhos.size(); i++){
+            if(caminho2 == menor_caminho and i < caminhos.size()-1){
+                removerArestas(caminhos[i],caminhos[i+1]);
+                caminho2 = dijkstra(n,s,t);
             }
-            caminhos.clear();
-            caminho2 = dijkstra(n,s,t,pai);
         }
-       
+
+        cout << "Segundo menor caminho: ";
         if(caminho2 != INF){ // verifica se foi achado um segundo caminho
             cout << caminho2 << endl;
         } else{

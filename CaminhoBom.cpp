@@ -132,22 +132,29 @@ int main(){
 
         //int aux1, aux2;
         int caminho2 = menor_caminho;
-        //vector<int> menoresCaminhos;
-
-        while(caminho2 == menor_caminho){
+        
+        if(caminho2 == INF){
+            cout << -1;
+        }
+        else{
+            while(caminho2 == menor_caminho){
             for(int i = 0; i < int(caminhos.size()); i++){
                 removerArestas(caminhos[i],caminhos[caminhos.size()], pai);
                 break;
             }
             caminhos.clear();
             caminho2 = dijkstra(n,s,t,pai);
-        }
+            }
        
-        if(caminho2 != INF){ // verifica se foi achado um segundo caminho
-            cout << caminho2 << endl;
-        } else{
-            cout << -1 << endl;
+            if(caminho2 != INF){ // verifica se foi achado um segundo caminho
+                cout <<caminho2 << endl;
+            } 
+            else{
+                cout << -1 << endl;
+            }
+
         }
+
         caminhos.clear();
 
         cin >> n >> m;

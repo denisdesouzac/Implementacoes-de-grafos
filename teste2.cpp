@@ -2,6 +2,7 @@
 #include<vector>
 #include<queue>
 #include<utility>
+#include<algorithm>
 using namespace std;
 
 #define INF 10000000
@@ -9,17 +10,27 @@ using namespace std;
 
 vector<pair<int, int> > * adj;
 vector<int> caminhos;
+vector<pair<int, int>>* caminhos2;
 
 //Função para registrar o caminho percorrido
 void registrarCaminho(int start, int end, int pai[]){
     //cout << "start : " << start << "end : "<< end << endl;
     if(pai[start] != end){
         caminhos.push_back(pai[start]);
+        //caminhos2[0].push_back(make_pair( pai[start], start));
         registrarCaminho(pai[start], end, pai);
     }
     else{
         caminhos.push_back(end);
     }
+}
+
+// Função para realizar a remoção das arestas de acordo como fornecido
+void removerArestas(){
+    for(auto it = caminhos.begin(); it != caminhos.end(); it++){
+        cout << *it;
+    }
+
 }
 
 int dijkstra(int n, int s, int t){
@@ -99,6 +110,7 @@ int main(){
     cin >> s >> t;
 
     adj = new vector<pair<int, int> >[n];
+    //caminhos2 = new vector<pair<int, int> >[n];
 
     // leitura do grafo
     for(int i = 0; i < m; i++){
@@ -110,10 +122,56 @@ int main(){
 
     cout << "Tamanho do Caminho : " << caminhos.size() << endl;
 
+    // inversão do caminho
+    reverse(caminhos.begin(), caminhos.end());
+
+    // Print do Vector de Caminhos
     cout << "Caminho: ";
     for(int x : caminhos){
         cout << x << ' ';
     }
+
+    /* // Print do Vector de Caminhos2
+    cout << "Caminho: ";
+    for(pair<int,int> x : caminhos2[0]){
+        cout << x.first << ' ' << x.second << ' ';
+    } */
+
+    // Print da LA
+    cout << endl << "L.A : " << endl;
+
+    for(int i = 0; i< n; i++){
+        cout << "Vértice " << i << " : ";
+        for(auto it = adj[i].begin(); it != adj[i].end(); it++){
+            cout << "**" <<it->first << "** Peso: " << it->second << " / ";
+        }
+        cout << endl;
+    }
+
+    /* //teste de como apagar da LA
+    adj[1].erase(adj[1].begin()+1);
+
+    // Print da LA
+    cout << endl << "L.A : " << endl;
+
+    for(int i = 0; i< n; i++){
+        cout << "Vértice " << i << " : ";
+        for(auto it = adj[i].begin(); it != adj[i].end(); it++){
+            cout << "**" <<it->first << "** Peso: " << it->second << " / ";
+        }
+        cout << endl;
+    } */
+
+
+
+    /* // Print do vector de caminhos
+    for(auto it = caminhos.begin(); it != caminhos.end(); it++){
+        cout << *it << " ";
+    } */
+
+    //removerArestas();
+
+    caminhos.clear();
 
     return 0;
 }

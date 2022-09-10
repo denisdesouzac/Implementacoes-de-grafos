@@ -28,14 +28,23 @@ void sairDistrito(int distrito, int ticket);
 
 bool entrarDistrito(int distrito, int ticket){  //retorna false se o Pizzaiolo for bloqueado
     // agora temos que verificar se o ticket que estamos tentando entrar é "VALIDO"
+    // Entrada
+    cout << " dados recebidos pela funcao de ENTRADA: distrito = " << distrito << ' ' << " ticket = " << ticket << endl;
     if(controle[distrito].size() == 2){ // se é controlado por 2 deve ser aceito por PELO MENOS 1
         if(ticket == controle[distrito].at(0) or ticket == controle[distrito].at(1)){
             cout << " Fui aceito no distrito " << distrito << " com o ticket " << ticket << endl;
             visitados.push_back(distrito);
             chegamos();
-            for(int i = 0; i < 2; i++){ // vai testar sair com ambos os tickets
-               sairDistrito(distrito,controle[distrito].at(i));
+            //Saída do distrito
+            if(ticket == controle[distrito].at(0)){
+                sairDistrito(distrito,controle[distrito].at(1));
             }
+            else{
+                sairDistrito(distrito,controle[distrito].at(0));
+            }
+            /* for(int i = 0; i < 2; i++){ // TEM QUE SAIR COM O OPOSTO
+               sairDistrito(distrito,controle[distrito].at(i));
+            } */
         }
         else{
             cout << " Fui Denied no distrito " << distrito << " com o ticket " << ticket << endl; 
@@ -59,7 +68,10 @@ bool entrarDistrito(int distrito, int ticket){  //retorna false se o Pizzaiolo f
 
 // Essa tá inicialmente OK
 void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
-    if(controle[distrito].size() == 2){ // se é controlado por 2 grupos -> pode sair com qualquer ticket
+    //std::cout << endl << "case de sair com size() = " << controle[distrito].size() << endl;
+    // Saída
+    cout << " dados recebidos pela funcao de SAÍDA: distrito = " << distrito << ' ' << " ticket = " << ticket << endl;
+    if(controle[distrito].size() == 2){ // se é controlado por 2 grupos -> sair com o ticket oposto
         if( ticket == controle[distrito].at(0)){ 
             for(int i = 0; i < d; i++){ // Vai testar entrar em todos os distritos
                 if( ehElemento(visitados, i)){
@@ -67,7 +79,7 @@ void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
                     continue;
                 }
                 else{
-                    cout << "Estou saindo do distrito " << distrito << " com o ticket " << controle[distrito].at(1) << " e indo para " <<  i << endl;
+                    cout << "Estoy saindo do distrito " << distrito << " (2) com o ticket " << controle[distrito].at(1) << " e indo para " <<  i << endl;
                     entrarDistrito(i,controle[distrito].at(1));
                 }
                    
@@ -81,8 +93,8 @@ void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
                     continue;
                 }
                 else{ 
-                    cout << "Estou saindo do distrito " << distrito << " com o ticket " << controle[distrito].at(0) << " e indo para " <<  i << endl;
-                    entrarDistrito(i,controle[distrito].at(1));
+                    cout << "Estou saindo do distrito " << distrito << "com o ticket " << controle[distrito].at(0) << " e indo para " <<  i << endl;
+                    entrarDistrito(i,controle[distrito].at(0));
                 }
                 
             }
@@ -95,7 +107,7 @@ void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
                 continue;
             }
             else{ 
-                cout << "Estou saindo do distrito " << distrito << " com o ticket " << controle[distrito].at(1) << " e indo para " <<  i << endl;
+                cout << "Estou saindo do distrito " << distrito << " (1) com o ticket " << controle[distrito].at(1) << " e indo para " <<  i << endl;
                 entrarDistrito(i,controle[distrito].at(0));
             }
         }
@@ -148,6 +160,12 @@ int main(){
         cout << endl;
     }
     cout << endl;
+
+    //print dos sizes
+    for(int i =0; i<d; i++){
+        cout << endl << controle[i].size() << endl;
+    }
+
 
     //
     for(int i = 0; i < d; i++){ // Com "i" sendo o vértice inicial

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include<algorithm>
 using namespace std;
 
 //Uma "lista de controle dos distritos"
@@ -67,19 +68,21 @@ bool entrarDistrito(int distrito, int ticket){  //retorna false se o Pizzaiolo f
 }
 
 // Essa tá inicialmente OK
-void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
+void sairDistritoInicial(int distrito, int ticket){  //controlar o ticket de saída
     //std::cout << endl << "case de sair com size() = " << controle[distrito].size() << endl;
     // Saída
-    cout << " dados recebidos pela funcao de SAÍDA: distrito = " << distrito << ' ' << " ticket = " << ticket << endl;
+    cout << " dados recebidos pela funcao de sairInicial: distrito = " << distrito << ' ' << " ticket = " << ticket << endl;
     if(controle[distrito].size() == 2){ // se é controlado por 2 grupos -> sair com o ticket oposto
         if( ticket == controle[distrito].at(0)){ 
             for(int i = 0; i < d; i++){ // Vai testar entrar em todos os distritos
+                visitados.clear(); // Limpar o vector de visitados pois cada vez que começamos por um ponto ou ticket novo temos Mudar TUDO
+                visitados.push_back(distrito); // adicionar ele mesmo à lista dos já visitados
                 if( ehElemento(visitados, i)){
                     cout << "Vou pular esse pq já foi visitado " << i << endl;
                     continue;
                 }
                 else{
-                    cout << "Estoy saindo do distrito " << distrito << " (2) com o ticket " << controle[distrito].at(1) << " e indo para " <<  i << endl;
+                    cout << "Estoy saindo do distrito " << distrito << " com o ticket " << controle[distrito].at(1) << " e indo para " <<  i << endl;
                     entrarDistrito(i,controle[distrito].at(1));
                 }
                    
@@ -88,12 +91,14 @@ void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
         }
         else{
             for(int i = 0; i < d; i++){ // Vai testar entrar em todos os distritos
+                visitados.clear(); // Limpar o vector de visitados pois cada vez que começamos por um ponto ou ticket novo temos Mudar TUDO
+                visitados.push_back(distrito); // adicionar ele mesmo à lista dos já visitados
                 if( ehElemento(visitados, i)){
                     cout << "Vou pular esse pq já foi visitado " << i << endl;
                     continue;
                 }
                 else{ 
-                    cout << "Estou saindo do distrito " << distrito << "com o ticket " << controle[distrito].at(0) << " e indo para " <<  i << endl;
+                    cout << "Estou saindo do distrito " << distrito << " com o ticket " << controle[distrito].at(0) << " e indo para " <<  i << endl;
                     entrarDistrito(i,controle[distrito].at(0));
                 }
                 
@@ -102,12 +107,15 @@ void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
     }
     else{ // se não é controlado por 2 é por apenas 1 -> sai com o ticket oposto
         for(int i = 0; i < d; i++){ // Vai testar entrar em todos os distritos
+            cout << "isso que deu merda" << endl;
+            visitados.clear(); // Limpar o vector de visitados pois cada vez que começamos por um ponto ou ticket novo temos Mudar TUDO
+            visitados.push_back(distrito); // adicionar ele mesmo à lista dos já visitados
             if( ehElemento(visitados, i)){
                 cout << "Vou pular esse pq já foi visitado " << i << endl;
                 continue;
             }
             else{ 
-                cout << "Estou saindo do distrito " << distrito << " (1) com o ticket " << controle[distrito].at(1) << " e indo para " <<  i << endl;
+                cout << "Estou saindo do distrito " << distrito << " (1) com o ticket " << controle[distrito].at(0) << " e indo para " <<  i << endl;
                 entrarDistrito(i,controle[distrito].at(0));
             }
         }
@@ -115,10 +123,27 @@ void sairDistrito(int distrito, int ticket){  //controlar o ticket de saída
 
 }
 
+void sairDistrito(int distrito, int ticket){
+    //std::cout << endl << "case de sair com size() = " << controle[distrito].size() << endl;
+    // Saída
+    cout << " dados recebidos pela funcao de sairDistrito: distrito = " << distrito << ' ' << " ticket = " << ticket << endl;
+
+    for(int i = 0; i < d; i++){ // Vai testar entrar em todos os distritos
+        if( ehElemento(visitados, i)){
+            cout << "Vou pular esse pq já foi visitado " << i << endl;
+            continue;
+        }
+        else{
+            cout << "Estou saindo do distrito " << distrito << " com o ticket " << ticket << " e indo para " <<  i << endl;
+            entrarDistrito(i,ticket);
+        } 
+    }
+}
+
 void tentarEntregar(int inicial, int ticket){
     cout << endl << "Começando entrega por inicial: " << inicial << " ticket :" << ticket << endl;
     //A entrada no distrito inicial não precisa ser testada (já garantimos que será com um ticket válido)
-    sairDistrito(inicial,ticket);
+    sairDistritoInicial(inicial,ticket);
 }
 
 int main(){
@@ -140,6 +165,9 @@ int main(){
     for(int i = 0; i < g; i++){
         int aux;   // sendo a primeira entrada de cada linha (quantidade de distritos controlados por aquele grupo)
         cin >> aux;
+        if(aux == 0){
+            continue;
+        }
         for( int x = 0; x < aux; x++){
             int y; // um distrito a ser adicionado
             cin >> y;
@@ -176,6 +204,8 @@ int main(){
             tentarEntregar(i, ticket);
         }
     }
+
+    cout << "fim";
 
     return 0;
 }

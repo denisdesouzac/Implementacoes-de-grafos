@@ -29,7 +29,7 @@ bool ehElemento(vector<int> visitados, int elemento){
 // obs: A corretude é asseguradaa pois tems trechos que evitam a "visita" de distritos repetidos
 void chegamos(int d){
     if((int)visitados.size() == d){
-        cout << "** "<< bomInicial << "**" << endl;
+        cout << bomInicial << endl;
         encerrar = true;
     }
 }

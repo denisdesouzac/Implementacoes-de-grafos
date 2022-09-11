@@ -154,6 +154,7 @@ int main(){
     while(d != 0 and g != 0){
 
         controle = new vector<int> [d]; // Instância o array de vectors (a "lista de controle")
+        encerrar = false; // Não encerrar programa
 
         //Receber as relações do grafo (não é necessário uma M.A ou L.A pois temos um grafo COMPLETO)
         for(int i = 0; i < g; i++){

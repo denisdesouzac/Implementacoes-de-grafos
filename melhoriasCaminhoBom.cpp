@@ -4,10 +4,11 @@ Gabriel Fernando Zanda Gonçalves - 202110234 - 14A
 Ronald Souza Galdino - 202110679 - 14A
 */
 
+// A ideia geral do algoritmo que normalmente é inserida aqui foi descrita no relatório :)
+
 #include<iostream>
 #include<vector>
 #include<queue>
-#include<utility>
 #include<algorithm>
 using namespace std;
 

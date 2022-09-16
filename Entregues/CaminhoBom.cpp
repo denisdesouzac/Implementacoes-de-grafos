@@ -41,10 +41,10 @@ void removerArestas(int start, int pai[]){
 
         for(int i = 0; i < int(adj[pai[start]].size()); i++){ // percorre as arestas que ligam cada vértice
 
-            pair<int, int> aresta = adj[pai[start]][i];
+            pair<int, int> aresta = adj[pai[start]][i];    // Verifica se o Start está na adjacência do seu pai // 3: 4 , 6 // 6: 3
 
-            if(start == aresta.first){// se for igual
-                adj[pai[start]].erase(adj[pai[start]].begin()+i); // removo a aresta da lista de adj
+            if(start == aresta.first){ // se for igual
+                adj[pai[start]].erase(adj[pai[start]].begin()+i); // removo a aresta da lista de adj do pai
                 start = pai[start];
                 break;
             }

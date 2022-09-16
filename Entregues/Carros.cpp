@@ -15,6 +15,7 @@ vector<int> visitados;  // vector de distritos já visitados (usamos array para 
 bool encerrar;          // Variável que defino encerramento do algoritmo (um caminho foi encontrado)
 int bomInicial = 0;     // Variável que indica o distrito inicial que obteve sucesso (a partir dele chegamos a todos os outros)
 
+
 // Função que verifica se um elemento está contido no vector visitados
 bool ehElemento(vector<int> visitados, int elemento){
     for(int x : visitados){
@@ -166,7 +167,7 @@ int main(){
             for( int x = 0; x < aux; x++){
                 int y; // um distrito a ser adicionado
                 cin >> y;
-                controle[y].push_back(i);
+                controle[y].push_back(i); // i = Grupo , y = distrito
             }
 
         }
